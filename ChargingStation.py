@@ -89,8 +89,6 @@ for count in range(len(df[dataColumn])):
 # Output Variable define
 points_of_recharge = []
 
-# print(initial_values)
-
 # Begin Logic
 for initial_SoC in initial_values:
    
@@ -107,20 +105,17 @@ for initial_SoC in initial_values:
                 if (present_SoC <= 50):
 
                     points_of_recharge.append(distance_travelled)
-                    # print(present_SoC)
-                    # print(points_of_recharge)
-                    # print("--")
-                    present_SoC = 100                           # Bike recharged to full when reached to 50%
+
+                    # Bike recharged to full when reached to 50%
+                    present_SoC = 100
                 
                 else:
 
                     # Bike SoC decreases with increase in travel displacement by 1km
                     present_SoC -= 1
-                    # print("SoC is decreasing")
 
                 # Increase distance travelled by 1km
                 distance_travelled += 1
-                # print(distance_travelled)
 
         elif (trip_number % 2 == 1):
 
@@ -129,7 +124,9 @@ for initial_SoC in initial_values:
                 if (present_SoC <= 50):
 
                     points_of_recharge.append(distance_travelled)
-                    present_SoC = 100                           # Bike recharged to full when reached to 50%
+
+                    # Bike recharged to full when reached to 50%
+                    present_SoC = 100                           
                 
                 else:
                     
@@ -149,11 +146,7 @@ def ascendingKeys(frequency_of_occurence):
     print('---------------------- SORTED DICTIONARY : KEY as DISTANCE, VALUE as FREQUENCY -----------------------------')
     print(result)
 
-# print("Points of Recharge:")
-# print(sorted(points_of_recharge))
 ctr = collections.Counter(points_of_recharge)
-# print("Values for ctr:")
-# print(ctr)
 frequency = dict(ctr)
 ascendingKeys(frequency)
 
@@ -211,6 +204,7 @@ for point_head in Distance_x_axis:
 
 # print(collection_of_set_of_three)
 print(len(collection_of_set_of_three))
+
 
 
 
