@@ -20,7 +20,7 @@ dataColumn = "Random1"
 # dataColumn = "Normal1"
 
 # Number of times Bike travels from A to B and viceversa
-total_number_of_trips = range(2)
+total_number_of_trips = range(1)
 present_SoC = 0
 # Distance travelled by that instant in the present trip
 distance_travelled = 0
@@ -92,6 +92,13 @@ for count in range(len(df[dataColumn])):
 # Output Variable define
 points_of_recharge = []
 
+
+# -------------------------------------------------------------------------------------
+
+# PRINT POINTS OF RECHARGE WHEN 100 RIDERS RIDE FROM A->B AND THEN B->A
+
+# -------------------------------------------------------------------------------------
+
 # Begin Logic
 for initial_SoC in initial_values:
    
@@ -156,17 +163,21 @@ ascendingKeys(frequency)
 Distance_x_axis = list(result.keys())
 Frequency_y_axis = list(result.values())
 
-# print("\n")
-# print("Points of Recharge")
-# print(Distance_x_axis)
-# print(len(Distance_x_axis))
+print("\n")
+print("Points of Recharge")
+print(Distance_x_axis)
+print(len(Distance_x_axis))
 
 # plt.plot(Distance_x_axis, Frequency_y_axis)
 # plt.xlabel('Distance')
 # plt.ylabel('Frequency')
 # plt.show()
 
-# For sets of 2 such that the distance between those two points(d): 25km < d < 50km
+# -------------------------------------------------------------------------------------
+
+# DETERMINE SET_OF_TWO (X,Y) SUCH THAT 25KM < (Y-X) < 50KM
+
+# -------------------------------------------------------------------------------------
 
 collection_of_set_of_two = []
 
@@ -181,39 +192,42 @@ for point_head in Distance_x_axis:
             set_of_two.append(point_tail)
             collection_of_set_of_two.append(set_of_two)
 
-# print(collection_of_set_of_two)
-# print(len(collection_of_set_of_two))
+print(collection_of_set_of_two)
+print(len(collection_of_set_of_two))
 
-# For sets of 3 such that the distance between the adjacent 3 points(d): 25km < d < 50km
+# # For sets of 3 such that the distance between the adjacent 3 points(d): 25km < d < 50km
 
-collection_of_set_of_three = []
+# collection_of_set_of_three = []
 
-for point_head in Distance_x_axis:
+# for point_head in Distance_x_axis:
 
-    for point_tail1 in Distance_x_axis:
+#     for point_tail1 in Distance_x_axis:
 
-        if ((point_tail1 - point_head >= 25) and (point_tail1 - point_head <= 50)):
+#         if ((point_tail1 - point_head >= 25) and (point_tail1 - point_head <= 50)):
 
-            for point_tail2 in Distance_x_axis:
+#             for point_tail2 in Distance_x_axis:
 
-                if ((point_tail2 - point_tail1 >= 25) and (point_tail2 - point_tail1 <= 50)):
+#                 if ((point_tail2 - point_tail1 >= 25) and (point_tail2 - point_tail1 <= 50)):
 
-                    set_of_three = []
-                    set_of_three.append(point_head)
-                    set_of_three.append(point_tail1)
-                    set_of_three.append(point_tail2)
+#                     set_of_three = []
+#                     set_of_three.append(point_head)
+#                     set_of_three.append(point_tail1)
+#                     set_of_three.append(point_tail2)
                     
-                    collection_of_set_of_three.append(set_of_three)
+#                     collection_of_set_of_three.append(set_of_three)
 
-# print(collection_of_set_of_three)
-print(len(collection_of_set_of_three))
+# # print(collection_of_set_of_three)
+# print(len(collection_of_set_of_three))
 
+
+
+# -------------------------------------------------------------------------------------
+
+# FILTER OUT STRANDED RIDERS FROM THE COLLECTION_SET_OF_TWO
+
+# -------------------------------------------------------------------------------------
 
 result_setofTwo = {}
-
-
-
-
 
 _collection_of_set_of_two = []
 
@@ -231,43 +245,84 @@ for set_of_two in collection_of_set_of_two:
         distance_travelled = 0
         present_SoC = initial_SoC
 
-        # When the rider hasn't reached the destination
-        while (distance_travelled < total_distance_in_one_trip):
+        for trip_number in total_number_of_trips:
 
-            # print("Current distance travelled is ", distance_travelled)
+            count += 1
 
-            if (distance_travelled in chargingStationCheckpoints):
+            if(trip_number % 2 == 0):
 
-                checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
+                # When the rider hasn't reached the destination
+                while (distance_travelled < total_distance_in_one_trip):
 
-                if (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
+                    # print("Current distance travelled is ", distance_travelled)
 
-                    present_SoC = 100
-                    _collection_of_set_of_two.append(set_of_two)
+                    if (distance_travelled in chargingStationCheckpoints):
 
-                elif (present_SoC <= leastSoC_before_getting_stranded):
+                        checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
 
-                    total_strandedRiderCount += 1
+                        if (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
 
-                    if (checkpointIndex == 0):
-                        strandedRiderCount_checkpoint1 += 1
-                    elif (checkpointIndex == 1):
-                        strandedRiderCount_checkpoint2 += 1
-                    # elif (checkpointIndex == 2):
-                    #     strandedRiderCount_checkpoint3 += 1
-                    # elif (checkpointIndex == 3):
-                    #     strandedRiderCount_checkpoint4 += 1
+                            present_SoC = 100
+                            _collection_of_set_of_two.append(set_of_two)
 
-                    break
+                        elif (present_SoC <= leastSoC_before_getting_stranded):
+
+                            total_strandedRiderCount += 1
+
+                            if (checkpointIndex == 0):
+                                strandedRiderCount_checkpoint1 += 1
+                            elif (checkpointIndex == 1):
+                                strandedRiderCount_checkpoint2 += 1
+                            # elif (checkpointIndex == 2):
+                            #     strandedRiderCount_checkpoint3 += 1
+                            # elif (checkpointIndex == 3):
+                            #     strandedRiderCount_checkpoint4 += 1
+
+                            break
+                    
+                    distance_travelled += 1
+                    present_SoC -= 1
             
-            distance_travelled += 1
-            present_SoC -= 1
+            elif(trip_number % 2 == 1):
+
+                # When the rider hasn't reached the destination
+                while (distance_travelled < total_distance_in_one_trip):
+
+                    # print("Current distance travelled is ", distance_travelled)
+
+                    if (distance_travelled in chargingStationCheckpoints):
+
+                        checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
+
+                        if (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
+
+                            present_SoC = 100
+                            _collection_of_set_of_two.append(set_of_two)
+
+                        elif (present_SoC <= leastSoC_before_getting_stranded):
+
+                            total_strandedRiderCount += 1
+
+                            if (checkpointIndex == 0):
+                                strandedRiderCount_checkpoint1 += 1
+                            elif (checkpointIndex == 1):
+                                strandedRiderCount_checkpoint2 += 1
+                            # elif (checkpointIndex == 2):
+                            #     strandedRiderCount_checkpoint3 += 1
+                            # elif (checkpointIndex == 3):
+                            #     strandedRiderCount_checkpoint4 += 1
+
+                            break
+                    
+                    distance_travelled -= 1
+                    present_SoC -= 1
 
     result_setofTwo.update({
         tuple(set_of_two) : total_strandedRiderCount
     })
 
-# print(result_setofTwo)
+print(result_setofTwo)
+print(len(result_setofTwo))
 
 
 _result_setofTwo = {}
@@ -291,6 +346,8 @@ for x in result_setofTwo:
 print("Count after : ", len(_result_setofTwo))
 # print(_result_setofTwo)
 
+print("Count total = ", count)
+
 setofTwo_list = []
 
 for item in _result_setofTwo.keys():
@@ -298,20 +355,28 @@ for item in _result_setofTwo.keys():
     setofTwo_list.append(list(item))
 
 
-# setofTwo_list = list(_result_setofTwo.keys())
+setofTwo_list = list(_result_setofTwo.keys())
 
 # print(setofTwo_list)
 # print(type(setofTwo_list))
+# print(len(setofTwo_list))
 
 
 
 
-# print("Count of collection set of Two after removing stranded ones : ", len(collection_of_set_of_two))
+# # print("Count of collection set of Two after removing stranded ones : ", len(collection_of_set_of_two))
 
-# set_of_two = setofTwo_list[56]
+# # set_of_two = setofTwo_list[56]
 
-# print("Set of Two here:")
-# print(set_of_two)
+# # print("Set of Two here:")
+# # print(set_of_two)
+
+
+# -------------------------------------------------------------------------------------
+
+# PRINT POINTS OF RECHARGE WHEN 100 RIDERS RIDE FROM A->B AND THEN B->A
+
+# -------------------------------------------------------------------------------------
 
 Anxiety_Avg_dict = {}
 
@@ -340,94 +405,187 @@ for set_of_two in setofTwo_list:
         distance_travelled = 0
         present_SoC = initial_SoC
 
-        # When the rider hasn't reached the destination
-        while (distance_travelled < total_distance_in_one_trip):
+        for trip_number in total_number_of_trips:
 
-            # print("Current distance travelled is ", distance_travelled)
+            count += 1
 
-            if (distance_travelled in chargingStationCheckpoints):
+            if(trip_number % 2 == 0):
 
-                checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
+                # When the rider hasn't reached the destination
+                while (distance_travelled < total_distance_in_one_trip):
 
-                if (present_SoC <= leastSoC_before_getting_stranded):
+                    # print("Current distance travelled is ", distance_travelled)
 
-                    total_strandedRiderCount += 1
+                    if (distance_travelled in chargingStationCheckpoints):
 
-                    if (checkpointIndex == 0):
-                        strandedRiderCount_checkpoint1 += 1
-                    elif (checkpointIndex == 1):
-                        strandedRiderCount_checkpoint2 += 1
-                    # elif (checkpointIndex == 2):
-                    #     strandedRiderCount_checkpoint3 += 1
-                    # elif (checkpointIndex == 3):
-                    #     strandedRiderCount_checkpoint4 += 1
+                        checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
 
-                    StrandedRiderStatus = 1
+                        if (present_SoC <= leastSoC_before_getting_stranded):
 
-                    break
+                            total_strandedRiderCount += 1
 
-                elif (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
+                            if (checkpointIndex == 0):
+                                strandedRiderCount_checkpoint1 += 1
+                            elif (checkpointIndex == 1):
+                                strandedRiderCount_checkpoint2 += 1
+                            # elif (checkpointIndex == 2):
+                            #     strandedRiderCount_checkpoint3 += 1
+                            # elif (checkpointIndex == 3):
+                            #     strandedRiderCount_checkpoint4 += 1
 
-                    # The rider charged to the nearest charging Station that was in the direction towards his destination
+                            StrandedRiderStatus = 1
 
-                    # Update frequency of the particular Checkpoint being used
-                    if (checkpointIndex == 0):
-                        checkpoint1_charging_frequency += 1
-                    elif (checkpointIndex == 1):
-                        checkpoint2_charging_frequency += 1
-                    # elif (checkpointIndex == 2):
-                    #     checkpoint3_charging_frequency += 1
-                    # elif (checkpointIndex == 3):
-                    #     checkpoint4_charging_frequency += 1
+                            break
 
-                    # At what SoC values are each riders charging?
-                    # chargingSoC_list.append(present_SoC)
+                        elif (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
 
-                    # all_charging_SoC.append(present_SoC)
+                            # The rider charged to the nearest charging Station that was in the direction towards his destination
 
-                    if (present_SoC > 45 and present_SoC <= 50):
-                        anxietyLevelFrequency[0] += 1
+                            # Update frequency of the particular Checkpoint being used
+                            if (checkpointIndex == 0):
+                                checkpoint1_charging_frequency += 1
+                            elif (checkpointIndex == 1):
+                                checkpoint2_charging_frequency += 1
+                            # elif (checkpointIndex == 2):
+                            #     checkpoint3_charging_frequency += 1
+                            # elif (checkpointIndex == 3):
+                            #     checkpoint4_charging_frequency += 1
 
-                    elif (present_SoC > 40 and present_SoC <= 45):
-                        anxietyLevelFrequency[1] += 1
+                            # At what SoC values are each riders charging?
+                            # chargingSoC_list.append(present_SoC)
 
-                    elif (present_SoC > 35 and present_SoC <= 40):
-                        anxietyLevelFrequency[2] += 1
+                            # all_charging_SoC.append(present_SoC)
 
-                    elif (present_SoC > 30 and present_SoC <= 35):
-                        anxietyLevelFrequency[3] += 1
+                            if (present_SoC > 45 and present_SoC <= 50):
+                                anxietyLevelFrequency[0] += 1
 
-                    elif (present_SoC > 25 and present_SoC <= 30):
-                        anxietyLevelFrequency[4] += 1
+                            elif (present_SoC > 40 and present_SoC <= 45):
+                                anxietyLevelFrequency[1] += 1
 
-                    elif (present_SoC > 20 and present_SoC <= 25):
-                        anxietyLevelFrequency[5] += 1
+                            elif (present_SoC > 35 and present_SoC <= 40):
+                                anxietyLevelFrequency[2] += 1
 
-                    elif (present_SoC > 15 and present_SoC <= 20):
-                        anxietyLevelFrequency[6] += 1
+                            elif (present_SoC > 30 and present_SoC <= 35):
+                                anxietyLevelFrequency[3] += 1
 
-                    elif (present_SoC > 10 and present_SoC <= 15):
-                        anxietyLevelFrequency[7] += 1
+                            elif (present_SoC > 25 and present_SoC <= 30):
+                                anxietyLevelFrequency[4] += 1
 
-                    elif (present_SoC > 5 and present_SoC <= 10):
-                        anxietyLevelFrequency[8] += 1
+                            elif (present_SoC > 20 and present_SoC <= 25):
+                                anxietyLevelFrequency[5] += 1
 
-                    present_SoC = 100
+                            elif (present_SoC > 15 and present_SoC <= 20):
+                                anxietyLevelFrequency[6] += 1
 
-                    strandedRiderCount = 0
-                    # checkpoint_charging_frequency = 0
+                            elif (present_SoC > 10 and present_SoC <= 15):
+                                anxietyLevelFrequency[7] += 1
 
-            # Rider just travelled 1 km
-            # Increase distance travelled by 1km
-            distance_travelled += 1
+                            elif (present_SoC > 5 and present_SoC <= 10):
+                                anxietyLevelFrequency[8] += 1
 
-            # Rider's SoC decreases by 1 %
-            present_SoC -= 1
-        
-        ending_SoC_list.append(present_SoC)
+                            present_SoC = 100
 
-    # print("Ending SoC : ")
-    # print(ending_SoC_list)
+                            strandedRiderCount = 0
+                            # checkpoint_charging_frequency = 0
+
+                    # Rider just travelled 1 km
+                    # Increase distance travelled by 1km
+                    distance_travelled += 1
+
+                    # Rider's SoC decreases by 1 %
+                    present_SoC -= 1
+
+                ending_SoC_list.append(present_SoC)
+
+            elif(trip_number % 2 == 1):
+
+                # When the rider hasn't reached the destination
+                while (distance_travelled < total_distance_in_one_trip):
+
+                    # print("Current distance travelled is ", distance_travelled)
+
+                    if (distance_travelled in chargingStationCheckpoints):
+
+                        checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
+
+                        if (present_SoC <= leastSoC_before_getting_stranded):
+
+                            total_strandedRiderCount += 1
+
+                            if (checkpointIndex == 0):
+                                strandedRiderCount_checkpoint1 += 1
+                            elif (checkpointIndex == 1):
+                                strandedRiderCount_checkpoint2 += 1
+                            # elif (checkpointIndex == 2):
+                            #     strandedRiderCount_checkpoint3 += 1
+                            # elif (checkpointIndex == 3):
+                            #     strandedRiderCount_checkpoint4 += 1
+
+                            StrandedRiderStatus = 1
+
+                            break
+
+                        elif (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
+
+                            # The rider charged to the nearest charging Station that was in the direction towards his destination
+
+                            # Update frequency of the particular Checkpoint being used
+                            if (checkpointIndex == 0):
+                                checkpoint1_charging_frequency += 1
+                            elif (checkpointIndex == 1):
+                                checkpoint2_charging_frequency += 1
+                            # elif (checkpointIndex == 2):
+                            #     checkpoint3_charging_frequency += 1
+                            # elif (checkpointIndex == 3):
+                            #     checkpoint4_charging_frequency += 1
+
+                            # At what SoC values are each riders charging?
+                            # chargingSoC_list.append(present_SoC)
+
+                            # all_charging_SoC.append(present_SoC)
+
+                            if (present_SoC > 45 and present_SoC <= 50):
+                                anxietyLevelFrequency[0] += 1
+
+                            elif (present_SoC > 40 and present_SoC <= 45):
+                                anxietyLevelFrequency[1] += 1
+
+                            elif (present_SoC > 35 and present_SoC <= 40):
+                                anxietyLevelFrequency[2] += 1
+
+                            elif (present_SoC > 30 and present_SoC <= 35):
+                                anxietyLevelFrequency[3] += 1
+
+                            elif (present_SoC > 25 and present_SoC <= 30):
+                                anxietyLevelFrequency[4] += 1
+
+                            elif (present_SoC > 20 and present_SoC <= 25):
+                                anxietyLevelFrequency[5] += 1
+
+                            elif (present_SoC > 15 and present_SoC <= 20):
+                                anxietyLevelFrequency[6] += 1
+
+                            elif (present_SoC > 10 and present_SoC <= 15):
+                                anxietyLevelFrequency[7] += 1
+
+                            elif (present_SoC > 5 and present_SoC <= 10):
+                                anxietyLevelFrequency[8] += 1
+
+                            present_SoC = 100
+
+                            strandedRiderCount = 0
+                            # checkpoint_charging_frequency = 0
+
+                    # Rider just travelled 1 km
+                    # Increase distance travelled by 1km
+                    distance_travelled -= 1
+
+                    # Rider's SoC decreases by 1 %
+                    present_SoC -= 1
+
+                ending_SoC_list.append(present_SoC)
+
+
     
     averageEndingSoC = sum(ending_SoC_list) / len(ending_SoC_list)
     # print("Ending SoC Average : ", averageEndingSoC)
@@ -494,8 +652,10 @@ for set_of_two in setofTwo_list:
 
 print(Anxiety_Avg_dict)
 
+print("Ending SoC : ")
+print(len(ending_SoC_list))
 
-
+print(anxietyLevelFrequency)
 
 
 
