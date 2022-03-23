@@ -20,7 +20,7 @@ dataColumn = "Random1"
 # dataColumn = "Normal1"
 
 # Number of times Bike travels from A to B and viceversa
-total_number_of_trips = range(1)
+total_number_of_trips = range(2)
 present_SoC = 0
 # Distance travelled by that instant in the present trip
 distance_travelled = 0
@@ -91,7 +91,6 @@ for count in range(len(df[dataColumn])):
 
 # Output Variable define
 points_of_recharge = []
-
 
 # Begin Logic
 for initial_SoC in initial_values:
