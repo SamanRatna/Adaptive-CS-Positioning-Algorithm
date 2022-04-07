@@ -9,6 +9,7 @@ from turtle import distance
 from numpy import number
 import pandas as pd
 import matplotlib.pyplot as plt
+import operator
 
 # Constant parameters
 num_of_bikes = 100                      # Total number of Bikes
@@ -20,7 +21,7 @@ dataColumn = "Random1"
 # dataColumn = "Normal1"
 
 # Number of times Bike travels from A to B and viceversa
-total_number_of_trips = range(1)
+total_number_of_trips = range(2)
 present_SoC = 0
 # Distance travelled by that instant in the present trip
 distance_travelled = 0
@@ -92,7 +93,17 @@ for count in range(len(df[dataColumn])):
 # Output Variable define
 points_of_recharge = []
 
-
+AtoB_count = 0
+BtoA_count = 0
+A1 = 0
+A2 = 0
+A3 = 0
+A4 = 0
+A5 = 0
+A6 = 0
+A7 = 0
+A8 = 0
+checkvalue = 0
 # -------------------------------------------------------------------------------------
 
 # PRINT POINTS OF RECHARGE WHEN 100 RIDERS RIDE FROM A->B AND THEN B->A
@@ -102,13 +113,15 @@ points_of_recharge = []
 # Begin Logic
 for initial_SoC in initial_values:
    
-    present_SoC = initial_SoC
+    # present_SoC = initial_SoC
 
     distance_travelled = 0
 
     for trip_number in total_number_of_trips:
 
         if(trip_number % 2 == 0):
+
+            present_SoC = initial_SoC
 
             while (distance_travelled < total_distance_in_one_trip):
 
@@ -126,8 +139,11 @@ for initial_SoC in initial_values:
 
                 # Increase distance travelled by 1km
                 distance_travelled += 1
+            # print("distance travelled : ", distance_travelled)
 
         elif (trip_number % 2 == 1):
+
+            present_SoC = initial_SoC
 
             while (distance_travelled <= total_distance_in_one_trip and distance_travelled > 0):
 
@@ -145,6 +161,8 @@ for initial_SoC in initial_values:
 
                 # Increase distance travelled by 1km
                 distance_travelled -= 1
+            # print("distance travelled : ", distance_travelled)
+
 
 
 # Arrange Dictionary keys in ascending order
@@ -166,12 +184,17 @@ Frequency_y_axis = list(result.values())
 print("\n")
 print("Points of Recharge")
 print(Distance_x_axis)
-print(len(Distance_x_axis))
+print("Total number of Points of Recharge : ", len(Distance_x_axis))
+# print(Frequency_y_axis)
 
 # plt.plot(Distance_x_axis, Frequency_y_axis)
 # plt.xlabel('Distance')
 # plt.ylabel('Frequency')
 # plt.show()
+
+
+
+
 
 # -------------------------------------------------------------------------------------
 
@@ -192,8 +215,8 @@ for point_head in Distance_x_axis:
             set_of_two.append(point_tail)
             collection_of_set_of_two.append(set_of_two)
 
-print(collection_of_set_of_two)
-print(len(collection_of_set_of_two))
+# print(collection_of_set_of_two)
+# print(len(collection_of_set_of_two))
 
 # # For sets of 3 such that the distance between the adjacent 3 points(d): 25km < d < 50km
 
@@ -231,7 +254,7 @@ result_setofTwo = {}
 
 _collection_of_set_of_two = []
 
-print("Count of total number of sets : ", len(collection_of_set_of_two))
+# print("Count of total number of sets : ", len(collection_of_set_of_two))
 
 copy_collection2 = collection_of_set_of_two
 
@@ -243,13 +266,15 @@ for set_of_two in collection_of_set_of_two:
     for initial_SoC in initial_values:
 
         distance_travelled = 0
-        present_SoC = initial_SoC
+        # present_SoC = initial_SoC
 
         for trip_number in total_number_of_trips:
 
             count += 1
 
             if(trip_number % 2 == 0):
+
+                present_SoC = initial_SoC
 
                 # When the rider hasn't reached the destination
                 while (distance_travelled < total_distance_in_one_trip):
@@ -285,8 +310,10 @@ for set_of_two in collection_of_set_of_two:
             
             elif(trip_number % 2 == 1):
 
+                present_SoC = initial_SoC
+
                 # When the rider hasn't reached the destination
-                while (distance_travelled < total_distance_in_one_trip):
+                while (distance_travelled <= total_distance_in_one_trip and distance_travelled > 0):
 
                     # print("Current distance travelled is ", distance_travelled)
 
@@ -321,8 +348,8 @@ for set_of_two in collection_of_set_of_two:
         tuple(set_of_two) : total_strandedRiderCount
     })
 
-print(result_setofTwo)
-print(len(result_setofTwo))
+# print(result_setofTwo)
+# print(len(result_setofTwo))
 
 
 _result_setofTwo = {}
@@ -330,7 +357,7 @@ _result_setofTwo = {}
 # Distance_x_axis = list(result.keys())
 # Frequency_y_axis = list(result.values())
 
-print("Count before : ", len(result_setofTwo))
+print("Count of total Sets of Two : ", len(result_setofTwo))
 
 for x in result_setofTwo:
 
@@ -343,10 +370,10 @@ for x in result_setofTwo:
             x : result_setofTwo[x]
         })
 
-print("Count after : ", len(_result_setofTwo))
+# print("Count after : ", len(_result_setofTwo))
 # print(_result_setofTwo)
 
-print("Count total = ", count)
+# print("Count total = ", count)
 
 setofTwo_list = []
 
@@ -359,9 +386,9 @@ setofTwo_list = list(_result_setofTwo.keys())
 
 # print(setofTwo_list)
 # print(type(setofTwo_list))
-# print(len(setofTwo_list))
+print("Total number of unstranded riders: ", len(setofTwo_list))
 
-
+# print(setofTwo_list)
 
 
 # # print("Count of collection set of Two after removing stranded ones : ", len(collection_of_set_of_two))
@@ -374,7 +401,7 @@ setofTwo_list = list(_result_setofTwo.keys())
 
 # -------------------------------------------------------------------------------------
 
-# PRINT POINTS OF RECHARGE WHEN 100 RIDERS RIDE FROM A->B AND THEN B->A
+# ANXIETY LEVELS
 
 # -------------------------------------------------------------------------------------
 
@@ -400,16 +427,14 @@ for set_of_two in setofTwo_list:
 
     for initial_SoC in initial_values:
 
-        # print("Initial SoC is: ", initial_SoC)
-
         distance_travelled = 0
-        present_SoC = initial_SoC
 
         for trip_number in total_number_of_trips:
 
-            count += 1
-
             if(trip_number % 2 == 0):
+
+                AtoB_count += 1
+                present_SoC = initial_SoC
 
                 # When the rider hasn't reached the destination
                 while (distance_travelled < total_distance_in_one_trip):
@@ -499,8 +524,12 @@ for set_of_two in setofTwo_list:
 
             elif(trip_number % 2 == 1):
 
+                BtoA_count += 1
+                present_SoC = initial_SoC
+
+
                 # When the rider hasn't reached the destination
-                while (distance_travelled < total_distance_in_one_trip):
+                while (distance_travelled <= total_distance_in_one_trip and distance_travelled > 0):
 
                     # print("Current distance travelled is ", distance_travelled)
 
@@ -527,6 +556,8 @@ for set_of_two in setofTwo_list:
 
                         elif (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
 
+                            checkvalue += 1
+
                             # The rider charged to the nearest charging Station that was in the direction towards his destination
 
                             # Update frequency of the particular Checkpoint being used
@@ -546,30 +577,38 @@ for set_of_two in setofTwo_list:
 
                             if (present_SoC > 45 and present_SoC <= 50):
                                 anxietyLevelFrequency[0] += 1
+                                # A1 += 1
 
                             elif (present_SoC > 40 and present_SoC <= 45):
                                 anxietyLevelFrequency[1] += 1
+                                # A2 += 1
 
                             elif (present_SoC > 35 and present_SoC <= 40):
                                 anxietyLevelFrequency[2] += 1
+                                # A3 += 2
 
                             elif (present_SoC > 30 and present_SoC <= 35):
                                 anxietyLevelFrequency[3] += 1
+                                # A4 += 1
 
                             elif (present_SoC > 25 and present_SoC <= 30):
                                 anxietyLevelFrequency[4] += 1
 
                             elif (present_SoC > 20 and present_SoC <= 25):
                                 anxietyLevelFrequency[5] += 1
+                                # A5 += 1
 
                             elif (present_SoC > 15 and present_SoC <= 20):
                                 anxietyLevelFrequency[6] += 1
+                                # A6 += 1
 
                             elif (present_SoC > 10 and present_SoC <= 15):
                                 anxietyLevelFrequency[7] += 1
+                                # A7 += 1
 
                             elif (present_SoC > 5 and present_SoC <= 10):
                                 anxietyLevelFrequency[8] += 1
+                                # A8 += 1
 
                             present_SoC = 100
 
@@ -584,6 +623,7 @@ for set_of_two in setofTwo_list:
                     present_SoC -= 1
 
                 ending_SoC_list.append(present_SoC)
+                # distance_travelled = 0
 
 
     
@@ -652,10 +692,30 @@ for set_of_two in setofTwo_list:
 
 print(Anxiety_Avg_dict)
 
-print("Ending SoC : ")
-print(len(ending_SoC_list))
+# yourdata = {(29, 74): [5.605, 26.125], (30, 74): [5.51, 25.64], (30, 75): [5.415, 25.45], (31, 74): [5.45, 25.4], (31, 75): [5.355, 25.2], (31, 76): [5.31, 25.0], (32, 74): [5.29, 24.55], (32, 75): [5.195, 24.325], (32, 76): [5.15, 24.1], (32, 77): [5.1, 23.875], (33, 74): [5.17, 23.955], (33, 75): [5.075, 23.71], (33, 76): [5.03, 23.465], (33, 77): [4.98, 23.22], (33, 78): [4.975, 22.975], (34, 74): [5.02, 23.2], (34, 75): [4.925, 22.93], (34, 76): [4.88, 22.66], (34, 77): [4.83, 22.39], (34, 78): [4.825, 22.12], (34, 79): [4.75, 21.85], (35, 74): [4.955, 22.885], (35, 75): [4.845, 22.6], (35, 76): [4.8, 22.315], (35, 77): [4.75, 22.03], (35, 78): [4.745, 21.745], (35, 79): [4.67, 21.46], (35, 80): [4.56, 21.175], (36, 74): [4.81, 22.22], (36, 75): [4.7, 21.91], (36, 76): [4.63, 21.6], (36, 77): [4.58, 21.29], (36, 78): [4.575, 20.98], (36, 79): [4.5, 20.67], (36, 80): [4.39, 20.36], (36, 81): [4.32, 20.05], (37, 74): [4.77, 21.975], (37, 75): [4.66, 21.65], (37, 76): [4.59, 21.325], (37, 77): [4.525, 21.0], (37, 78): [4.52, 20.675], (37, 79): [4.445, 20.35], (37, 80): [4.335, 20.025], (37, 81): [4.265, 19.7], (37, 82): [4.2, 19.375], (38, 74): [4.41, 20.14], (38, 75): [4.3, 19.755], (38, 76): [4.23, 19.37], (38, 77): [4.165, 18.985], (38, 78): [4.1, 18.6], (38, 79): [4.025, 18.215], (38, 80): [3.915, 17.83], (38, 81): [3.845, 17.445], (38, 82): [3.78, 17.06], (38, 83): [3.715, 16.675], (39, 74): [4.45, 20.35], (39, 75): [4.34, 19.96], (39, 76): [4.27, 19.57], (39, 77): [4.205, 19.18], (39, 78): [4.14, 18.79], (39, 79): [4.06, 18.4], (39, 80): [3.95, 18.01], (39, 81): [3.88, 17.62], (39, 82): [3.815, 17.23], (39, 83): [3.75, 16.84], (39, 84): [3.67, 16.45], (40, 74): [4.385, 20.06], (40, 75): [4.255, 19.65], (40, 76): [4.185, 19.24], (40, 77): [4.12, 18.83], (40, 78): [4.055, 18.42], (40, 79): [3.975, 18.01], (40, 80): [3.845, 17.6], (40, 81): [3.775, 17.19], (40, 82): [3.71, 16.78], (40, 83): [3.645, 16.37], (40, 84): [3.565, 15.96], (40, 85): [3.435, 15.55], (41, 74): [4.17, 18.985], (41, 75): [4.04, 18.53], (41, 76): [3.925, 18.075], (41, 77): [3.86, 17.62], (41, 78): [3.795, 17.165], (41, 79): [3.715, 16.71], (41, 80): [3.585, 16.255], (41, 81): [3.47, 15.8], (41, 82): [3.405, 15.345], (41, 83): [3.34, 14.89], (41, 84): [3.26, 14.435], (41, 85): [3.13, 13.98], (41, 86): [3.015, 13.525], (42, 74): [4.04, 18.32], (42, 75): [3.91, 17.83], (42, 76): [3.795, 17.34], (42, 77): [3.695, 16.85], (42, 78): [3.63, 16.36], (42, 79): [3.55, 15.87], (42, 80): [3.42, 15.38], (42, 81): [3.305, 14.89], (42, 82): [3.205, 14.4], (42, 83): [3.14, 13.91], (42, 84): [3.06, 13.42], (42, 85): [2.93, 12.93], (42, 86): [2.815, 12.44], (42, 87): [2.715, 11.95], (43, 74): [4.1, 18.5], (43, 75): [3.97, 18.0], (43, 76): [3.855, 17.5], (43, 77): [3.755, 17.0], (43, 78): [3.68, 16.5], (43, 79): [3.6, 16.0], (43, 80): [3.47, 15.5], (43, 81): [3.355, 15.0], (43, 82): [3.255, 14.5], (43, 83): [3.18, 14.0], (43, 84): [3.1, 13.5], (43, 85): [2.97, 13.0], (43, 86): [2.855, 12.5], (43, 87): [2.755, 12.0], (43, 88): [2.68, 11.5], (43, 89): [2.6, 11.0], (44, 74): [4.18, 19.0], (44, 75): [4.05, 18.5], (44, 76): [3.935, 18.0], (44, 77): [3.835, 17.5], (44, 78): [3.76, 17.0], (44, 79): [3.68, 16.5], (44, 80): [3.55, 16.0], (44, 81): [3.435, 15.5], (44, 82): [3.335, 15.0], (44, 83): [3.26, 14.5], (44, 84): [3.18, 14.0], (44, 85): [3.05, 13.5], (44, 86): [2.935, 13.0], (44, 87): [2.835, 12.5], (44, 88): [2.76, 12.0], (44, 89): [2.68, 11.5], (45, 74): [4.255, 19.5], (45, 75): [4.125, 19.0], (45, 76): [4.01, 18.5], (45, 77): [3.91, 18.0], (45, 78): [3.835, 17.5], (45, 79): [3.755, 17.0], (45, 80): [3.625, 16.5], (45, 81): [3.51, 16.0], (45, 82): [3.41, 15.5], (45, 83): [3.335, 15.0], (45, 84): [3.255, 14.5], (45, 85): [3.125, 14.0], (45, 86): [3.01, 13.5], (45, 87): [2.91, 13.0], (45, 88): [2.835, 12.5], (45, 89): [2.755, 12.0], (45, 90): [2.715, 11.95], (46, 74): [4.355, 20.0], (46, 75): [4.225, 19.5], (46, 76): [4.11, 19.0], (46, 77): [4.01, 18.5], (46, 78): [3.935, 18.0], (46, 79): [3.855, 17.5], (46, 80): [3.725, 17.0], (46, 81): [3.61, 16.5], (46, 82): [3.51, 16.0], (46, 83): [3.435, 15.5], (46, 84): [3.355, 15.0], (46, 85): [3.225, 14.5], (46, 86): [3.11, 14.0], (46, 87): [3.01, 13.5], (46, 88): [2.935, 13.0], (46, 89): [2.855, 12.5], (46, 90): [2.815, 12.44], (46, 91): [3.015, 13.525], (47, 74): [4.47, 20.5], (47, 75): [4.34, 20.0], (47, 76): [4.225, 19.5], (47, 77): [4.125, 19.0], (47, 78): [4.05, 18.5], (47, 79): [3.97, 18.0], (47, 80): [3.84, 17.5], (47, 81): [3.725, 17.0], (47, 82): [3.625, 16.5], (47, 83): [3.55, 16.0], (47, 84): [3.47, 15.5], (47, 85): [3.34, 15.0], (47, 86): [3.225, 14.5], (47, 87): [3.125, 14.0], (47, 88): [3.05, 13.5], (47, 89): [2.97, 13.0], (47, 90): [2.93, 12.93], (47, 91): [3.13, 13.98], (47, 92): [3.435, 15.55], (48, 74): [4.6, 21.0], (48, 75): [4.47, 20.5], (48, 76): [4.355, 20.0], (48, 77): [4.255, 19.5], (48, 78): [4.18, 19.0], (48, 79): [4.1, 18.5], (48, 80): [3.97, 18.0], (48, 81): [3.855, 17.5], (48, 82): [3.755, 17.0], (48, 83): [3.68, 16.5], (48, 84): [3.6, 16.0], (48, 85): [3.47, 15.5], (48, 86): [3.355, 15.0], (48, 87): [3.255, 14.5], (48, 88): [3.18, 14.0], (48, 89): [3.1, 13.5], (48, 90): [3.06, 13.42], (48, 91): [3.26, 14.435], (48, 92): [3.565, 15.96], (48, 93): [3.67, 16.45], (49, 74): [4.68, 21.5], (49, 75): [4.55, 21.0], (49, 76): [4.435, 20.5], (49, 77): [4.335, 20.0], (49, 78): [4.26, 19.5], (49, 79): [4.18, 19.0], (49, 80): [4.05, 18.5], (49, 81): [3.935, 18.0], (49, 82): [3.835, 17.5], (49, 83): [3.76, 17.0], (49, 84): [3.68, 16.5], (49, 85): [3.55, 16.0], (49, 86): [3.435, 15.5], (49, 87): [3.335, 15.0], (49, 88): [3.26, 14.5], (49, 89): [3.18, 14.0], (49, 90): [3.14, 13.91], (49, 91): [3.34, 14.89], (49, 92): [3.645, 16.37], (49, 93): [3.75, 16.84], (49, 94): [3.715, 16.675], (50, 75): [4.625, 21.5], (50, 76): [4.51, 21.0], (50, 77): [4.41, 20.5], (50, 78): [4.335, 20.0], (50, 79): [4.255, 19.5], (50, 80): [4.125, 19.0], (50, 81): [4.01, 18.5], (50, 82): [3.91, 18.0], (50, 83): [3.835, 17.5], (50, 84): [3.755, 17.0], (50, 85): [3.625, 16.5], (50, 86): [3.51, 16.0], (50, 87): [3.41, 15.5], (50, 88): [3.335, 15.0], (50, 89): [3.255, 14.5], (50, 90): [3.205, 14.4], (50, 91): [3.405, 15.345], (50, 92): [3.71, 16.78], (50, 93): [3.815, 17.23], (50, 94): [3.78, 17.06], (50, 95): [4.2, 19.375], (51, 76): [4.61, 21.5], (51, 77): [4.51, 21.0], (51, 78): [4.435, 20.5], (51, 79): [4.355, 20.0], (51, 80): [4.225, 19.5], (51, 81): [4.11, 19.0], (51, 82): [4.01, 18.5], (51, 83): [3.935, 18.0], (51, 84): [3.855, 17.5], (51, 85): [3.725, 17.0], (51, 86): [3.61, 16.5], (51, 87): [3.51, 16.0], (51, 88): [3.435, 15.5], (51, 89): [3.355, 15.0], (51, 90): [3.305, 14.89], (51, 91): [3.47, 15.8], (51, 92): [3.775, 17.19], (51, 93): [3.88, 17.62], (51, 94): [3.845, 17.445], (51, 95): [4.265, 19.7], (51, 96): [4.32, 20.05], (52, 77): [4.625, 21.5], (52, 78): [4.55, 21.0], (52, 79): [4.47, 20.5], (52, 80): [4.34, 20.0], (52, 81): [4.225, 19.5], (52, 82): [4.125, 19.0], (52, 83): [4.05, 18.5], (52, 84): [3.97, 18.0], (52, 85): [3.84, 17.5], (52, 86): [3.725, 17.0], (52, 87): [3.625, 16.5], (52, 88): [3.55, 16.0], (52, 89): [3.47, 15.5], (52, 90): [3.42, 15.38], (52, 91): [3.585, 16.255], (52, 92): [3.845, 17.6], (52, 93): [3.95, 18.01], (52, 94): [3.915, 17.83], (52, 95): [4.335, 20.025], (52, 96): [4.39, 20.36], (52, 97): [4.56, 21.175], (53, 78): [4.68, 21.5], (53, 79): [4.6, 21.0], (53, 80): [4.47, 20.5], (53, 81): [4.355, 20.0], (53, 82): [4.255, 19.5], (53, 83): [4.18, 19.0], (53, 84): [4.1, 18.5], (53, 85): [3.97, 18.0], (53, 86): [3.855, 17.5], (53, 87): [3.755, 17.0], (53, 88): [3.68, 16.5], (53, 89): [3.6, 16.0], (53, 90): [3.55, 15.87], (53, 91): [3.715, 16.71], (53, 92): [3.975, 18.01], (53, 93): [4.06, 18.4], (53, 94): [4.025, 18.215], (53, 95): [4.445, 20.35], (53, 96): [4.5, 20.67], (53, 97): [4.67, 21.46], (53, 98): [4.75, 21.85], (54, 79): [4.68, 21.5], (54, 80): [4.55, 21.0], (54, 81): [4.435, 20.5], (54, 82): [4.335, 20.0], (54, 83): [4.26, 19.5], (54, 84): [4.18, 19.0], (54, 85): [4.05, 18.5], (54, 86): [3.935, 18.0], (54, 87): [3.835, 17.5], (54, 88): [3.76, 17.0], (54, 89): [3.68, 16.5], (54, 90): [3.63, 16.36], (54, 91): [3.795, 17.165], (54, 92): [4.055, 18.42], (54, 93): [4.14, 18.79], (54, 94): [4.1, 18.6], (54, 95): [4.52, 20.675], (54, 96): [4.575, 20.98], (54, 97): [4.745, 21.745], (54, 98): [4.825, 22.12], (54, 99): [4.975, 22.975], (55, 80): [4.625, 21.5], (55, 81): [4.51, 21.0], (55, 82): [4.41, 20.5], (55, 83): [4.335, 20.0], (55, 84): [4.255, 19.5], (55, 85): [4.125, 19.0], (55, 86): [4.01, 18.5], (55, 87): [3.91, 18.0], (55, 88): [3.835, 17.5], (55, 89): [3.755, 17.0], (55, 90): [3.695, 16.85], (55, 91): [3.86, 17.62], (55, 92): [4.12, 18.83], (55, 93): [4.205, 19.18], (55, 94): [4.165, 18.985], (55, 95): [4.525, 21.0], (55, 96): [4.58, 21.29], (55, 97): [4.75, 22.03], (55, 98): [4.83, 22.39], (55, 99): [4.98, 23.22], (55, 100): [5.1, 23.875], (56, 81): [4.61, 21.5], (56, 82): [4.51, 21.0], (56, 83): [4.435, 20.5], (56, 84): [4.355, 20.0], (56, 85): [4.225, 19.5], (56, 86): [4.11, 19.0], (56, 87): [4.01, 18.5], (56, 88): [3.935, 18.0], (56, 89): [3.855, 17.5], (56, 90): [3.795, 17.34], (56, 91): [3.925, 18.075], (56, 92): [4.185, 19.24], (56, 93): [4.27, 19.57], (56, 94): [4.23, 19.37], (56, 95): [4.59, 21.325], (56, 96): [4.63, 21.6], (56, 97): [4.8, 22.315], (56, 98): [4.88, 22.66], (56, 99): [5.03, 23.465], (56, 100): [5.15, 24.1], (56, 101): [5.31, 25.0], (57, 82): [4.625, 21.5], (57, 83): [4.55, 21.0], (57, 84): [4.47, 20.5], (57, 85): [4.34, 20.0], (57, 86): [4.225, 19.5], (57, 87): [4.125, 19.0], (57, 88): [4.05, 18.5], (57, 89): [3.97, 18.0], (57, 90): [3.91, 17.83], (57, 91): [4.04, 18.53], (57, 92): [4.255, 19.65], (57, 93): [4.34, 19.96], (57, 94): [4.3, 19.755], (57, 95): [4.66, 21.65], (57, 96): [4.7, 21.91], (57, 97): [4.845, 22.6], (57, 98): [4.925, 22.93], (57, 99): [5.075, 23.71], (57, 100): [5.195, 24.325], (57, 101): [5.355, 25.2], (57, 102): [5.415, 25.45], (58, 83): [4.68, 21.5], (58, 84): [4.6, 21.0], (58, 85): [4.47, 20.5], (58, 86): [4.355, 20.0], (58, 87): [4.255, 19.5], (58, 88): [4.18, 19.0], (58, 89): [4.1, 18.5], (58, 90): [4.04, 18.32], (58, 91): [4.17, 18.985], (58, 92): [4.385, 20.06], (58, 93): [4.45, 20.35], (58, 94): [4.41, 20.14], (58, 95): [4.77, 21.975], (58, 96): [4.81, 22.22], (58, 97): [4.955, 22.885], (58, 98): [5.02, 23.2], (58, 99): [5.17, 23.955], (58, 100): [5.29, 24.55], (58, 101): [5.45, 25.4], (58, 102): [5.51, 25.64], (58, 103): [5.605, 26.125]}
+# print(sorted(Anxiety_Avg_dict.items(), key = lambda kv:(kv[1], kv[0])))   
+# print(Anxiety_Avg_dict.sorted(key=lambda e: e['key']['subkey'], reverse=True))
+# print(sorted(Anxiety_Avg_dict, key=lambda Anxiety_Avg_dict: Anxiety_Avg_dict.get('key', {}).get('subkey'), reverse=True))
 
-print(anxietyLevelFrequency)
+# sorted_d = sorted(Anxiety_Avg_dict.items(), key=operator.itemgetter(0))
+# print("Sorted Dictionary : ")
+# print(sorted_d)
+
+# print("Ending SoC : ")
+# print(len(ending_SoC_list))
+# print(anxietyLevelFrequency)
+
+# print(AtoB_count)
+# print(BtoA_count)
+# print(A1,A2,A3,A4,A5,A6,A7,A8)
+# print(checkvalue)
+
+
+
+
+
+
+
 
 
 
