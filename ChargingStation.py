@@ -20,7 +20,7 @@ dataColumn = "Random1"
 # dataColumn = "Normal1"
 
 # Number of times Bike travels from A to B and viceversa
-total_number_of_trips = range(1)
+total_number_of_trips = range(2)
 present_SoC = 0
 # Distance travelled by that instant in the present trip
 distance_travelled = 0
@@ -94,13 +94,14 @@ points_of_recharge = []
 # Begin Logic
 for initial_SoC in initial_values:
    
-    present_SoC = initial_SoC
 
     distance_travelled = 0
 
     for trip_number in total_number_of_trips:
 
         if(trip_number % 2 == 0):
+
+            present_SoC = initial_SoC
 
             while (distance_travelled < total_distance_in_one_trip):
 
@@ -123,6 +124,8 @@ for initial_SoC in initial_values:
                 # print(distance_travelled)
 
         elif (trip_number % 2 == 1):
+
+            present_SoC = initial_SoC
 
             while (distance_travelled <= total_distance_in_one_trip and distance_travelled > 0):
 
@@ -185,8 +188,8 @@ for point_head in Distance_x_axis:
             set_of_two.append(point_tail)
             collection_of_set_of_two.append(set_of_two)
 
-# print(collection_of_set_of_two)
-print(len(collection_of_set_of_two))
+print(collection_of_set_of_two)
+# print(len(collection_of_set_of_two))
 
 # For sets of 3 such that the distance between the adjacent 3 points(d): 25km < d < 50km
 
@@ -209,8 +212,8 @@ for point_head in Distance_x_axis:
                     
                     collection_of_set_of_three.append(set_of_three)
 
-# print(collection_of_set_of_three)
-print(len(collection_of_set_of_three))
+print(collection_of_set_of_three)
+# print(len(collection_of_set_of_three))
 
 
 
