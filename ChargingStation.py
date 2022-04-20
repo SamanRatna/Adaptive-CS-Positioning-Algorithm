@@ -21,7 +21,7 @@ dataColumn = "Random1"
 # dataColumn = "Normal1"
 
 # Number of times Bike travels from A to B and viceversa
-total_number_of_trips = range(1)
+total_number_of_trips = range(2)
 present_SoC = 0
 # Distance travelled by that instant in the present trip
 distance_travelled = 0
@@ -323,7 +323,7 @@ for set_of_three in collection_of_set_of_three:
         tuple(set_of_three) : total_strandedRiderCount
     })
 
-print(result_setofThree)
+# print(result_setofThree)
 
 
 _result_setofThree = {}
@@ -639,7 +639,7 @@ for set_of_three in setofThree_list:
             tuple(set_of_three) : [(summ / total_number_of_charges), averageEndingSoC]
         })
 
-print(Anxiety_Avg_dict)
+# print(Anxiety_Avg_dict)
 
 # -------------------------------------------------------------------------------------
 
@@ -655,7 +655,7 @@ anxLevelList = []
 sortedDict = {}
 
 
-for i in range(30):
+for i in range(10):
     minAnxTemp = 100
     for key, val in data.items():
         if val[0] < minAnxTemp:
