@@ -13,7 +13,7 @@ import operator
 
 # Constant parameters
 num_of_bikes = 100                      # Total number of Bikes
-total_distance_in_one_trip = 132        # distance in kms
+total_distance_in_one_trip = 200        # distance in kms
 SoC_logging_distance = 1                # distance in kms
 
 # Which Data will I be using from Spreadsheet?
@@ -21,7 +21,7 @@ dataColumn = "Random1"
 # dataColumn = "Normal1"
 
 # Number of times Bike travels from A to B and viceversa
-total_number_of_trips = range(2)
+total_number_of_trips = range(1)
 present_SoC = 0
 # Distance travelled by that instant in the present trip
 distance_travelled = 0
@@ -441,7 +441,6 @@ for set_of_three in setofThree_list:
                 # When the rider hasn't reached the destination
                 while (distance_travelled <= total_distance_in_one_trip and distance_travelled > 0):
 
-
                     if (distance_travelled in chargingStationCheckpoints):
 
                         checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
@@ -517,6 +516,10 @@ for set_of_three in setofThree_list:
    
     total_number_of_charges = checkpoint1_charging_frequency + checkpoint2_charging_frequency + checkpoint3_charging_frequency
 
+    print("checkpoint1_charging_frequency : ", checkpoint1_charging_frequency);
+    print("checkpoint2_charging_frequency : ", checkpoint2_charging_frequency);
+    print("checkpoint3_charging_frequency : ", checkpoint3_charging_frequency);
+    print("checkpoint4_charging_frequency : ", checkpoint4_charging_frequency);
     i = 1
     summ = 0
     for _value in anxietyLevelFrequency:
@@ -528,6 +531,8 @@ for set_of_three in setofThree_list:
         Anxiety_Avg_dict.update({
             tuple(set_of_three) : [(summ / total_number_of_charges), averageEndingSoC]
         })
+
+    print("summ :", summ)
 
 # print(Anxiety_Avg_dict)
 
