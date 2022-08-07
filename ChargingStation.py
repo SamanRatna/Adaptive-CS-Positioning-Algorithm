@@ -16,10 +16,10 @@ import itertools
 
 # Constant parameters
 num_of_bikes = 100                      # Total number of Bikes
-total_distance_in_one_trip = 132        # distance in kms
+total_distance_in_one_trip = 500        # distance in kms
 SoC_logging_distance = 1                # distance in kms
 full_charge_value = 100
-number_of_charging_stations = 3
+number_of_charging_stations = 10
 
 x_axis_distance_in_a_trip = []
 y_axis_number_of_unstranded_riders = []
@@ -201,22 +201,26 @@ most_number_of_charging_stations = math.ceil(total_distance_in_one_trip/25)
 
 list_with_verified_distances = []
 
-if (number_of_charging_stations == 1):
-    all_possible_combinations = itertools.product(Distance_x_axis)
-elif (number_of_charging_stations == 2):
-    all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis)
-elif (number_of_charging_stations == 3):
-    all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis)
-elif (number_of_charging_stations == 4):
-    all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
-elif (number_of_charging_stations == 5):
-    all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
-elif (number_of_charging_stations == 6):
-    all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
-elif (number_of_charging_stations == 7):
-    all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
-elif (number_of_charging_stations == 8):
-    all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
+# if (number_of_charging_stations == 1):
+#     all_possible_combinations = itertools.product(Distance_x_axis)
+# elif (number_of_charging_stations == 2):
+#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis)
+# elif (number_of_charging_stations == 3):
+#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis)
+# elif (number_of_charging_stations == 4):
+#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
+# elif (number_of_charging_stations == 5):
+#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
+# elif (number_of_charging_stations == 6):
+#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
+# elif (number_of_charging_stations == 7):
+#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
+# elif (number_of_charging_stations == 8):
+#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
+
+all_possible_combinations = itertools.combinations(Distance_x_axis, number_of_charging_stations)
+
+counter_exception = 0
 
 for every_combination in all_possible_combinations:
     print(every_combination)
@@ -231,7 +235,7 @@ for every_combination in all_possible_combinations:
         if (station_position == number_of_charging_stations):
 
             # When accounting for distance between last charging station and total distance in a trip
-            print("\n")
+            # print("\n")
             if ((total_distance_in_one_trip - every_combination[station_position - 1] >= 25) and (total_distance_in_one_trip - every_combination[station_position - 1] <= 50)):
 
                 validity_counter += 1
@@ -249,6 +253,7 @@ for every_combination in all_possible_combinations:
         
         else:
             last_checkpoint = 0
+            counter_exception += 1
             break
 
     if (validity_counter == number_of_charging_stations + 1):
@@ -390,7 +395,7 @@ for _set_of_three in list_with_verified_distances:
 
                             for i in range(number_of_charging_stations):
                                 checkpointBased_Charging_Number_Count[i] += 1
-                                print("checkpointBased_Charging_Number_Count : ", checkpointBased_Charging_Number_Count)
+                                # print("checkpointBased_Charging_Number_Count : ", checkpointBased_Charging_Number_Count)
 
                             if (present_SoC > 45 and present_SoC <= 50):
                                 anxietyLevelFrequency[0] += 1
@@ -437,7 +442,7 @@ for _set_of_three in list_with_verified_distances:
                 
                 ending_SoC_list.append(present_SoC)
 
-            avg_Station_Occupancy_number[i] = sum(checkpointBased_Charging_Number_Count[i])
+            # avg_Station_Occupancy_number[i] = sum(checkpointBased_Charging_Number_Count[i])
 
         if (discard_set == 1):
             break
@@ -449,12 +454,12 @@ for _set_of_three in list_with_verified_distances:
     for i in range(number_of_charging_stations):
         if (checkpointBased_Charging_Number_Count[i] == 0):
             discarded_list_count += 1
-            print("Stations with 0 Charging : ", _set_of_three)
+            # print("Stations with 0 Charging : ", _set_of_three)
             # for i in range(number_of_c
             # harging_stations):
                 # print("checkpointBased_Charging_Number_Count ", checkpointBased_Charging_Number_Count[i])
 
-    if (total_strandedRiderCount == 0):
+    if (total_strandedRiderCount == 0 and discarded_list_count == 0):
 
         averageEndingSoC = sum(ending_SoC_list) / len(ending_SoC_list)
         # result_setofThree.update({
@@ -489,12 +494,19 @@ print("Discarded count : ", discarded_number_of_sets)
 # print("stranded count that should be zero : ", total_strandedRiderCount)
 data = Anxiety_Avg_dict
 
+
+print("least_number_of_charging_stations : ", least_number_of_charging_stations)
+print("Most_number_of_charging_stations : ", most_number_of_charging_stations)
+print("counter_exception :", counter_exception)
+
 anxLevelList = []
 sortedDict = {}
+minKey = 0
 
 for i in range(10):
-    minAnxTemp = 100
+    minAnxTemp = 200
     for key, val in data.items():
+        print(key,val)
         if val[0] < minAnxTemp:
             minAnxTemp = val[0]
             minKey = key
@@ -508,26 +520,26 @@ print("Sorted Top 10: ")
 print(sortedDict)
 
 
-import csv  
+# import csv  
 
-header = ['name', 'area', 'country_code2', 'country_code3']
-data = ['Afghanistan', 652090, 'AF', 'AFG']
-fieldnames = ['name', 'area', 'country_code2', 'country_code3']
+# header = ['name', 'area', 'country_code2', 'country_code3']
+# data = ['Afghanistan', 652090, 'AF', 'AFG']
+# fieldnames = ['name', 'area', 'country_code2', 'country_code3']
 
-with open('data_test.csv', 'w', encoding='UTF8') as f:
-    # writer = csv.writer(f)
+# with open('data_test.csv', 'w', encoding='UTF8') as f:
+#     # writer = csv.writer(f)
 
-    # # write the header
-    # writer.writerow(sortedDict)
+#     # # write the header
+#     # writer.writerow(sortedDict)
 
-    # # write the data
-    # writer.writerow(sortedDict)
+#     # # write the data
+#     # writer.writerow(sortedDict)
 
 
-# csv header
+# # csv header
 
-    writer = csv.DictWriter(f, fieldnames=fieldnames)
-    writer.writeheader()
-    writer.writerows(sortedDict)
+#     writer = csv.DictWriter(f, fieldnames=fieldnames)
+#     writer.writeheader()
+#     writer.writerows(sortedDict)
 
 
