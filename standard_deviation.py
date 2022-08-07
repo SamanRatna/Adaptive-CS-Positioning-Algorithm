@@ -17,7 +17,7 @@ charging_station_location = [25, 50, 84]
 # charging_station_location = [46, 96, 125]
 
 # Which Data will I be using from Spreadsheet?
-data_collection = ["Random Data 1", "Random Data 2", "Random Data 3", "Random Data 4", "Random Data 5", "Random Data 6", "Random Data 7", "Random Data 8", "Random Data 9", "Random Data 10", "5% change A", "5% change B", "5% change C"]
+data_collection = ["Random Data 2", "Random Data 3", "Random Data 4", "Random Data 5", "Random Data 6", "Random Data 7", "Random Data 8", "Random Data 9", "Random Data 10", "5% change A", "5% change B", "5% change C"]
 # data_collection = ["random data 1"]
 
 overall_data = []
@@ -35,7 +35,7 @@ for collection in data_collection:
 
     # SoC data input for the system
     # df = pd.read_excel(r'data_collection.xlsx')
-    df = pd.read_excel(r'data_collection.xlsx')
+    df = pd.read_excel(r'Data_Collection_Set.xlsx')
     initial_values = []
 
     print("Data Column Used:                            ", dataColumn)
