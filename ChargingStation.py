@@ -70,7 +70,7 @@ weighted_summation_for_checkpoint4 = 0
 total_frequency_for_checkpoint4 = 1
 
 strandedRiderCount = 0
-total_strandedRiderCount = 0
+# total_strandedRiderCount = 0
 
 leastSoC_before_getting_stranded = 5
 checkpoint_charging_frequency = 0
@@ -268,6 +268,7 @@ print("Number of verified combinations : ", len(list_with_verified_distances))
 
 result_setofThree = {}
 Anxiety_Avg_dict = {}
+counter = 0
 
 for _set_of_three in list_with_verified_distances:
 
@@ -275,6 +276,13 @@ for _set_of_three in list_with_verified_distances:
     total_strandedRiderCount = 0
     ending_SoC_list = []
     total_number_of_charges = 0
+    discard_set = 0
+
+    # counter += 1
+    # print("count: ", counter)
+
+
+    # print("_set_of_three : ", _set_of_three)
 
 
     checkpointBased_Charging_Number_Count = []
@@ -290,11 +298,17 @@ for _set_of_three in list_with_verified_distances:
 
     chargingStationCheckpoints = _set_of_three
 
+    counter = 0
+
     for initial_SoC in initial_values:
 
         distance_travelled = 0
+        counter += 1
+        # print("Initial soc counter : ", counter)
 
         for trip_number in total_number_of_trips:
+
+            # print("trip_number : ", trip_number)
 
             if(trip_number % 2 == 0):
 
@@ -350,11 +364,14 @@ for _set_of_three in list_with_verified_distances:
                                 if (checkpointIndex == i):
                                     checkpointBased_strandedRiderCount[i] += 1
 
+                            discard_set = 1
                             break
                     
                     distance_travelled += 1
                     present_SoC -= 1 
 
+                if (discard_set == 1):
+                    break
                 ending_SoC_list.append(present_SoC)
 
             elif(trip_number % 2 == 1):
@@ -373,6 +390,7 @@ for _set_of_three in list_with_verified_distances:
 
                             for i in range(number_of_charging_stations):
                                 checkpointBased_Charging_Number_Count[i] += 1
+                                print("checkpointBased_Charging_Number_Count : ", checkpointBased_Charging_Number_Count)
 
                             if (present_SoC > 45 and present_SoC <= 50):
                                 anxietyLevelFrequency[0] += 1
@@ -418,332 +436,98 @@ for _set_of_three in list_with_verified_distances:
                     present_SoC -= 1
                 
                 ending_SoC_list.append(present_SoC)
-   
+
+            avg_Station_Occupancy_number[i] = sum(checkpointBased_Charging_Number_Count[i])
+
+        if (discard_set == 1):
+            break
+
+
     for i in range(number_of_charging_stations):
         total_number_of_charges = total_number_of_charges + checkpointBased_Charging_Number_Count[i]
     
     for i in range(number_of_charging_stations):
         if (checkpointBased_Charging_Number_Count[i] == 0):
             discarded_list_count += 1
+            print("Stations with 0 Charging : ", _set_of_three)
+            # for i in range(number_of_c
+            # harging_stations):
+                # print("checkpointBased_Charging_Number_Count ", checkpointBased_Charging_Number_Count[i])
 
-    if (discarded_list_count == 0):
-        pass
-    else:
-        discarded_number_of_sets += 1
-        break
+    if (total_strandedRiderCount == 0):
 
-    averageEndingSoC = sum(ending_SoC_list) / len(ending_SoC_list)
+        averageEndingSoC = sum(ending_SoC_list) / len(ending_SoC_list)
+        # result_setofThree.update({
+        #     tuple(_set_of_three) : total_strandedRiderCount
+        # })
 
-    result_setofThree.update({
-        tuple(_set_of_three) : total_strandedRiderCount
-    })
+        i = 1
+        summ = 0
+        for _value in anxietyLevelFrequency:
+            summ = summ + _value*i
+            i += 1
 
-    i = 1
-    summ = 0
-    for _value in anxietyLevelFrequency:
-        summ = summ + _value*i
-        i += 1
-
-    # Anxiety Average dictionary:
-
-        Anxiety_Avg_dict.update({
-            tuple(_set_of_three) : [(summ / total_number_of_charges), averageEndingSoC]
-        })
-
+            # Anxiety Average dictionary:
+            Anxiety_Avg_dict.update({
+                tuple(_set_of_three) : [(summ / total_number_of_charges), averageEndingSoC]
+            })
 
 # print(filtered_list)
 # print(type(filtered_list))
+# print("List after filtration : ", (Anxiety_Avg_dict))
 print("List before filtration : ", len(list_with_verified_distances))
 print("List after filtration : ", len(Anxiety_Avg_dict))
 print("Discarded count : ", discarded_number_of_sets)
 
 
-# _result_setofThree = {}
-
-# for x in result_setofThree:
-
-#     # Not stranded
-#     if (result_setofThree[x] == 0):
-
-#         _result_setofThree.update({
-#             x : result_setofThree[x]
-#         })
-
-
-
-# setofThree_list = []
-
-# for item in _result_setofThree.keys():
-
-#     setofThree_list.append(list(item))
-
-# setofThree_list = list(_result_setofThree.keys())
-
-# print("Total sets of Three with unstranded riders: ", len(setofThree_list))
-
-
-
-# total_distance_in_one_trip = total_distance_in_one_trip + 10
-# x_axis_distance_in_a_trip.append(total_distance_in_one_trip)
-# y_axis_number_of_unstranded_riders.append(len(setofThree_list))
-
-# # print(Frequency_y_axis)
-# plt.plot(x_axis_distance_in_a_trip, y_axis_number_of_unstranded_riders)
-# plt.xlabel('x_axis_distance_in_a_trip')
-# plt.ylabel('y_axis_number_of_unstranded_riders')
-# plt.show()
-
-
-
-
 # # -------------------------------------------------------------------------------------
 
-# # ANXIETY LEVELS
-
-# # -------------------------------------------------------------------------------------
-
-# Anxiety_Avg_dict = {}
-
-# for __set_of_three in setofThree_list:
-
-#     anxietyLevelFrequency = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-#     checkpointBased_Charging_Number_Count = []
-
-#     for i in range(number_of_charging_stations):
-#         checkpointBased_Charging_Number_Count.append(0)
-
-#     strandedRiderCount_checkpoint1 = 0
-#     strandedRiderCount_checkpoint2 = 0
-#     strandedRiderCount_checkpoint3 = 0
-
-#     total_strandedRiderCount = 0
-#     total_number_of_charges = 0
-
-#     chargingStationCheckpoints = __set_of_three
-
-#     ending_SoC_list = []
-
-#     for initial_SoC in initial_values:
-
-#         distance_travelled = 0
-
-#         for trip_number in total_number_of_trips:
-
-#             if(trip_number % 2 == 0):
-
-#                 present_SoC = initial_SoC
-
-#                 # When the rider hasn't reached the destination
-#                 while (distance_travelled < total_distance_in_one_trip):
-
-#                     if (distance_travelled in chargingStationCheckpoints):
-
-#                         checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
-
-#                         if ((checkpointIndex != 2 and present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50) or (checkpointIndex == 2 and (total_distance_in_one_trip - distance_travelled) < (full_charge_value - leastSoC_before_getting_stranded))):
-                            
-#                             # The rider charged to the nearest charging Station that was in the direction towards his destination
-
-#                             # Update frequency of the particular Checkpoint being used
-
-#                             for i in range(number_of_charging_stations):
-#                                 checkpointBased_Charging_Number_Count[i] += 1
-
-#                             if (present_SoC > 45 and present_SoC <= 50):
-#                                 anxietyLevelFrequency[0] += 1
-
-#                             elif (present_SoC > 40 and present_SoC <= 45):
-#                                 anxietyLevelFrequency[1] += 1
-
-#                             elif (present_SoC > 35 and present_SoC <= 40):
-#                                 anxietyLevelFrequency[2] += 1
-
-#                             elif (present_SoC > 30 and present_SoC <= 35):
-#                                 anxietyLevelFrequency[3] += 1
-
-#                             elif (present_SoC > 25 and present_SoC <= 30):
-#                                 anxietyLevelFrequency[4] += 1
-
-#                             elif (present_SoC > 20 and present_SoC <= 25):
-#                                 anxietyLevelFrequency[5] += 1
-
-#                             elif (present_SoC > 15 and present_SoC <= 20):
-#                                 anxietyLevelFrequency[6] += 1
-
-#                             elif (present_SoC > 10 and present_SoC <= 15):
-#                                 anxietyLevelFrequency[7] += 1
-
-#                             elif (present_SoC > 5 and present_SoC <= 10):
-#                                 anxietyLevelFrequency[8] += 1
-
-#                             present_SoC = 100
-
-#                             strandedRiderCount = 0
-
-#                         elif ((present_SoC <= leastSoC_before_getting_stranded) or (checkpointIndex == 2 and (total_distance_in_one_trip - distance_travelled) > (full_charge_value - leastSoC_before_getting_stranded))):                        
-
-#                             total_strandedRiderCount += 1
-
-#                             # if (checkpointIndex == 0):
-#                             #     strandedRiderCount_checkpoint1 += 1
-#                             # elif (checkpointIndex == 1):
-#                             #     strandedRiderCount_checkpoint2 += 1
-#                             # elif (checkpointIndex == 2):
-#                             #     strandedRiderCount_checkpoint3 += 1
-                            
-#                             StrandedRiderStatus = 1
-#                             break                        
-
-#                     # Rider just travelled 1 km
-#                     # Increase distance travelled by 1km
-#                     distance_travelled += 1
-
-#                     # Rider's SoC decreases by 1 %
-#                     present_SoC -= 1
-
-#                 ending_SoC_list.append(present_SoC)
-
-#             elif(trip_number % 2 == 1):
-
-#                 present_SoC = initial_SoC
-#                 distance_travelled = total_distance_in_one_trip
-
-#                 # When the rider hasn't reached the destination
-#                 while (distance_travelled <= total_distance_in_one_trip and distance_travelled > 0):
-
-#                     if (distance_travelled in chargingStationCheckpoints):
-
-#                         checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
-
-#                         # if (present_SoC <= leastSoC_before_getting_stranded):
-#                         if ((present_SoC <= leastSoC_before_getting_stranded) or (checkpointIndex == 0 and (distance_travelled) > (full_charge_value - leastSoC_before_getting_stranded))):                        
-
-#                             total_strandedRiderCount += 1
-
-#                             # if (checkpointIndex == 0):
-#                             #     strandedRiderCount_checkpoint1 += 1
-#                             # elif (checkpointIndex == 1):
-#                             #     strandedRiderCount_checkpoint2 += 1
-#                             # elif (checkpointIndex == 2):
-#                             #     strandedRiderCount_checkpoint3 += 1
-                           
-#                             StrandedRiderStatus = 1
-
-#                             break
-
-#                         # elif (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
-#                         elif ((checkpointIndex != 0 and present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50) or (checkpointIndex == 0 and (distance_travelled) < (full_charge_value - leastSoC_before_getting_stranded))):
-
-#                             # The rider charged to the nearest charging Station that was in the direction towards his destination
-
-#                             # Update frequency of the particular Checkpoint being used
-                            
-#                             for i in range(number_of_charging_stations):
-#                                 checkpointBased_Charging_Number_Count[i] += 1
-
-#                             if (present_SoC > 45 and present_SoC <= 50):
-#                                 anxietyLevelFrequency[0] += 1
-
-#                             elif (present_SoC > 40 and present_SoC <= 45):
-#                                 anxietyLevelFrequency[1] += 1
-
-#                             elif (present_SoC > 35 and present_SoC <= 40):
-#                                 anxietyLevelFrequency[2] += 1
-
-#                             elif (present_SoC > 30 and present_SoC <= 35):
-#                                 anxietyLevelFrequency[3] += 1
-
-#                             elif (present_SoC > 25 and present_SoC <= 30):
-#                                 anxietyLevelFrequency[4] += 1
-
-#                             elif (present_SoC > 20 and present_SoC <= 25):
-#                                 anxietyLevelFrequency[5] += 1
-
-#                             elif (present_SoC > 15 and present_SoC <= 20):
-#                                 anxietyLevelFrequency[6] += 1
-
-#                             elif (present_SoC > 10 and present_SoC <= 15):
-#                                 anxietyLevelFrequency[7] += 1
-
-#                             elif (present_SoC > 5 and present_SoC <= 10):
-#                                 anxietyLevelFrequency[8] += 1
-
-#                             present_SoC = 100
-
-#                             strandedRiderCount = 0
-
-#                     # Rider just travelled 1 km
-#                     # Increase distance travelled by 1km
-#                     distance_travelled -= 1
-
-#                     # Rider's SoC decreases by 1 %
-#                     present_SoC -= 1
-
-#                 ending_SoC_list.append(present_SoC)
-
-#     averageEndingSoC = sum(ending_SoC_list) / len(ending_SoC_list)
-
-#     for i in range(number_of_charging_stations):
-#         total_number_of_charges = total_number_of_charges + checkpointBased_Charging_Number_Count[i]
-    
-#     for i in range(number_of_charging_stations):
-#         if (checkpointBased_Charging_Number_Count[i] == 0):
-#             discarded_list_count += 1
-
-#     if (discarded_list_count == 0):
-#         # filtered_list.append(__set_of_three)
-#         pass
-#     else:
-#         discarded_number_of_sets += 1
-#         break
-
-#     i = 1
-#     summ = 0
-#     for _value in anxietyLevelFrequency:
-#         summ = summ + _value*i
-#         i += 1
-
-#     # Anxiety Average dictionary:
-
-#         Anxiety_Avg_dict.update({
-#             tuple(__set_of_three) : [(summ / total_number_of_charges), averageEndingSoC]
-#         })
-
-# # print(filtered_list)
-# # print(type(filtered_list))
-# print("List before filtration : ", len(setofThree_list))
-# print("List after filtration : ", len(Anxiety_Avg_dict))
-# print("Discarded count : ", discarded_number_of_sets)
-
-# # print(Anxiety_Avg_dict)
-
-# # -------------------------------------------------------------------------------------
-
-# # TOP 5 SETS OF THREE WITH LEAST AVERAGE ANXIETY LEVELS
+# # TOP 10 SETS OF THREE WITH LEAST AVERAGE ANXIETY LEVELS
 
 # # -------------------------------------------------------------------------------------
 
 # print("stranded count that should be zero : ", total_strandedRiderCount)
-# data = Anxiety_Avg_dict
+data = Anxiety_Avg_dict
 
-# anxLevelList = []
-# sortedDict = {}
+anxLevelList = []
+sortedDict = {}
 
-# for i in range(10):
-#     minAnxTemp = 100
-#     for key, val in data.items():
-#         if val[0] < minAnxTemp:
-#             minAnxTemp = val[0]
-#             minKey = key
-#             minVal = val
-#     del data[(minKey)]
-#     minVal[0] = round(minVal[0], 2)
-#     minVal[1] = round(minVal[1], 2)
-#     sortedDict.update({minKey: minVal})
+for i in range(10):
+    minAnxTemp = 100
+    for key, val in data.items():
+        if val[0] < minAnxTemp:
+            minAnxTemp = val[0]
+            minKey = key
+            minVal = val
+    del data[(minKey)]
+    minVal[0] = round(minVal[0], 2)
+    minVal[1] = round(minVal[1], 2)
+    sortedDict.update({minKey: minVal})
 
-# print("Sorted Top 10: ")
-# print(sortedDict)
+print("Sorted Top 10: ")
+print(sortedDict)
 
+
+import csv  
+
+header = ['name', 'area', 'country_code2', 'country_code3']
+data = ['Afghanistan', 652090, 'AF', 'AFG']
+fieldnames = ['name', 'area', 'country_code2', 'country_code3']
+
+with open('data_test.csv', 'w', encoding='UTF8') as f:
+    # writer = csv.writer(f)
+
+    # # write the header
+    # writer.writerow(sortedDict)
+
+    # # write the data
+    # writer.writerow(sortedDict)
+
+
+# csv header
+
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(sortedDict)
 
 
