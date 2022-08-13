@@ -8,16 +8,17 @@ import csv
 num_of_bikes = 100                                          # Total number of Bikes
 total_distance_in_one_trip = 132                            # distance in kms
 SoC_logging_distance = 1                                    # distance in kms
-full_charge_SoC = 100                                        # Upto what SoC to charge?
+full_charge_SoC = 80                                        # Upto what SoC to charge?
 total_number_of_trips = range(2)                            # 1: A->B, 2: A->B->A, 3: A->B->A->B
-charging_station_location = [25, 50, 84]
-# charging_station_location = [45, 74, 99, 131]
+charging_station_location = [43, 89]
+# charging_station_location = [27, 52, 77, 102]
+# charging_station_location = [25, 50, 84]
 # charging_station_location = [33, 58, 87]
 # charging_station_location = [25, 50, 84]
 # charging_station_location = [46, 96, 125]
 
 # Which Data will I be using from Spreadsheet?
-data_collection = ["Random Data 2", "Random Data 3", "Random Data 4", "Random Data 5", "Random Data 6", "Random Data 7", "Random Data 8", "Random Data 9", "Random Data 10", "5% change A", "5% change B", "5% change C"]
+data_collection = ["random data 1", "Random Data 2", "Random Data 3", "Random Data 4", "Random Data 5", "Random Data 6", "Random Data 7", "Random Data 8", "Random Data 9", "Random Data 10", "5% change A", "5% change B", "5% change C"]
 # data_collection = ["random data 1"]
 
 overall_data = []
@@ -35,7 +36,7 @@ for collection in data_collection:
 
     # SoC data input for the system
     # df = pd.read_excel(r'data_collection.xlsx')
-    df = pd.read_excel(r'Data_Collection_Set.xlsx')
+    df = pd.read_excel(r'data_collection2.xlsx')
     initial_values = []
 
     print("Data Column Used:                            ", dataColumn)
@@ -120,7 +121,7 @@ for collection in data_collection:
     overall_data.append(current_temp_data)
 
 # open the file in the write mode
-f = open('/generated_csv/soc100_132_3CS.csv', 'w')
+f = open('generated_csv/soc80_132_2CS.csv', 'w')
 
 # create the csv writer
 writer = csv.writer(f)

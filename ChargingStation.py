@@ -16,10 +16,11 @@ import itertools
 
 # Constant parameters
 num_of_bikes = 100                      # Total number of Bikes
-total_distance_in_one_trip = 500        # distance in kms
+total_distance_in_one_trip = 132        # distance in kms
 SoC_logging_distance = 1                # distance in kms
 full_charge_value = 100
-number_of_charging_stations = 10
+number_of_charging_stations = 5
+distance_where_charging_starts = 50
 
 x_axis_distance_in_a_trip = []
 y_axis_number_of_unstranded_riders = []
@@ -99,7 +100,7 @@ AnxietyLevelCollection_setOfTwo = []
 AnxietyLevelCollection_setOfThree = []
 
 # SoC data input for the system
-df = pd.read_excel(r'data_collection.xlsx')
+df = pd.read_excel(r'data_collection2.xlsx')
 initial_values = []
 
 print("Data Column Used:                            ", dataColumn)
@@ -128,7 +129,7 @@ for initial_SoC in initial_values:
 
             while (distance_travelled < total_distance_in_one_trip):
 
-                if (present_SoC <= 50):
+                if (present_SoC <= distance_where_charging_starts):
 
                     points_of_recharge.append(distance_travelled)
 
@@ -149,7 +150,7 @@ for initial_SoC in initial_values:
 
             while (distance_travelled <= total_distance_in_one_trip and distance_travelled > 0):
 
-                if (present_SoC <= 50):
+                if (present_SoC <= distance_where_charging_starts):
 
                     points_of_recharge.append(distance_travelled)
 
@@ -326,7 +327,7 @@ for _set_of_three in list_with_verified_distances:
 
                         checkpointIndex = chargingStationCheckpoints.index(distance_travelled)
 
-                        if (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
+                        if (present_SoC > leastSoC_before_getting_stranded and present_SoC <= distance_where_charging_starts):
                             
                             for i in range(number_of_charging_stations):
                                 checkpointBased_Charging_Number_Count[i] += 1
