@@ -8,7 +8,7 @@ import csv
 num_of_bikes = 100                                          # Total number of Bikes
 total_distance_in_one_trip = 132                            # distance in kms
 SoC_logging_distance = 1                                    # distance in kms
-full_charge_SoC = 80                                        # Upto what SoC to charge?
+full_charge_SoC = 100                                        # Upto what SoC to charge?
 total_number_of_trips = range(2)                            # 1: A->B, 2: A->B->A, 3: A->B->A->B
 charging_station_location = [43, 89]
 # charging_station_location = [27, 52, 77, 102]

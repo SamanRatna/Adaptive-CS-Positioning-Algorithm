@@ -13,13 +13,14 @@ import matplotlib.pyplot as plt
 import operator
 import math
 import itertools
+import csv
 
 # Constant parameters
 num_of_bikes = 100                      # Total number of Bikes
-total_distance_in_one_trip = 132        # distance in kms
+total_distance_in_one_trip = 200        # distance in kms
 SoC_logging_distance = 1                # distance in kms
 full_charge_value = 100
-number_of_charging_stations = 5
+number_of_charging_stations = 4
 distance_where_charging_starts = 50
 
 x_axis_distance_in_a_trip = []
@@ -36,7 +37,8 @@ print("Most_number_of_charging_stations : ", most_number_of_charging_stations)
 
 # Which Data will I be using from Spreadsheet?
 dataColumn = "Random1"
-# dataColumn = "Normal1"
+# dataColumn = "random data 1"
+# dataColumn = "5% change C"
 
 # Number of times Bike travels from A to B and viceversa
 total_number_of_trips = range(2)
@@ -45,30 +47,6 @@ present_SoC = 0
 distance_travelled = 0
 counter = 0
 result = {}
-
-checkpoint_1 = 44
-checkpoint_2 = 88
-checkpoint_3 = 132
-
-checkpoint_1_distances = {}
-checkpoint_2_distances = {}
-checkpoint_3_distances = {}
-checkpoint_4_distances = {}
-
-weighted_summation_for_checkpoint = 0
-total_frequency_for_checkpoint = 1
-
-weighted_summation_for_checkpoint1 = 0
-total_frequency_for_checkpoint1 = 1
-
-weighted_summation_for_checkpoint2 = 0
-total_frequency_for_checkpoint2 = 1
-
-weighted_summation_for_checkpoint3 = 0
-total_frequency_for_checkpoint3 = 1
-
-weighted_summation_for_checkpoint4 = 0
-total_frequency_for_checkpoint4 = 1
 
 strandedRiderCount = 0
 # total_strandedRiderCount = 0
@@ -80,16 +58,6 @@ chargingSoC = {}
 checkpointwise_Stranded_Count = {}
 
 total_rider_count = 0
-
-strandedRiderCount_checkpoint1 = 0
-strandedRiderCount_checkpoint2 = 0
-strandedRiderCount_checkpoint3 = 0
-strandedRiderCount_checkpoint4 = 0
-
-checkpoint1_charging_frequency = 0
-checkpoint2_charging_frequency = 0
-checkpoint3_charging_frequency = 0
-checkpoint4_charging_frequency = 0
 
 anxietyLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 anxietyLevelFrequency = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -134,7 +102,7 @@ for initial_SoC in initial_values:
                     points_of_recharge.append(distance_travelled)
 
                     # Bike recharged to full when reached to 50%
-                    present_SoC = 100
+                    present_SoC = full_charge_value
                 
                 else:
 
@@ -155,7 +123,7 @@ for initial_SoC in initial_values:
                     points_of_recharge.append(distance_travelled)
 
                     # Bike recharged to full when reached to 50%
-                    present_SoC = 100                           
+                    present_SoC = full_charge_value                           
                 
                 else:
                     
@@ -171,8 +139,7 @@ def ascendingKeys(frequency_of_occurence):
         result.update({
             i: frequency_of_occurence[i]
         })
-    # print('---------------------- SORTED DICTIONARY : KEY as DISTANCE, VALUE as FREQUENCY -----------------------------')
-    # print(result)
+ 
 
 ctr = collections.Counter(points_of_recharge)
 frequency = dict(ctr)
@@ -186,12 +153,6 @@ print("Points of Recharge")
 print(Distance_x_axis)
 print("Total number of Points of Recharge : ", len(Distance_x_axis))
 
-# print(Frequency_y_axis)
-# plt.plot(Distance_x_axis, Frequency_y_axis)
-# plt.xlabel('Distance')
-# plt.ylabel('Frequency')
-# plt.show()
-
 # # -------------------------------------------------------------------------------------
 
 # # GENERIC LOGIC
@@ -200,43 +161,22 @@ print("Total number of Points of Recharge : ", len(Distance_x_axis))
 least_number_of_charging_stations = math.floor(total_distance_in_one_trip/80)
 most_number_of_charging_stations = math.ceil(total_distance_in_one_trip/25)
 
-list_with_verified_distances = []
-
-# if (number_of_charging_stations == 1):
-#     all_possible_combinations = itertools.product(Distance_x_axis)
-# elif (number_of_charging_stations == 2):
-#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis)
-# elif (number_of_charging_stations == 3):
-#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis)
-# elif (number_of_charging_stations == 4):
-#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
-# elif (number_of_charging_stations == 5):
-#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
-# elif (number_of_charging_stations == 6):
-#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
-# elif (number_of_charging_stations == 7):
-#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
-# elif (number_of_charging_stations == 8):
-#     all_possible_combinations = itertools.product(Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis, Distance_x_axis)
 
 all_possible_combinations = itertools.combinations(Distance_x_axis, number_of_charging_stations)
-
+list_with_verified_distances = []
 counter_exception = 0
 
 for every_combination in all_possible_combinations:
-    print(every_combination)
     count += 1
 
     last_checkpoint = 0
     validity_counter = 0
-    # every_combination[4] = total_distance_in_one_trip
 
     for station_position in range(number_of_charging_stations+1):
 
         if (station_position == number_of_charging_stations):
 
             # When accounting for distance between last charging station and total distance in a trip
-            # print("\n")
             if ((total_distance_in_one_trip - every_combination[station_position - 1] >= 25) and (total_distance_in_one_trip - every_combination[station_position - 1] <= 50)):
 
                 validity_counter += 1
@@ -248,7 +188,6 @@ for every_combination in all_possible_combinations:
             
         elif ((every_combination[station_position] - last_checkpoint >= 25) and (every_combination[station_position] - last_checkpoint <= 50)):
 
-            # do smth
             validity_counter += 1
             last_checkpoint = every_combination[station_position]
         
@@ -259,10 +198,6 @@ for every_combination in all_possible_combinations:
 
     if (validity_counter == number_of_charging_stations + 1):
         list_with_verified_distances.append(every_combination)
-
-print(list_with_verified_distances)
-print("Number of total combinations : ", count)
-print("Number of verified combinations : ", len(list_with_verified_distances))
 
 
 
@@ -275,7 +210,8 @@ print("Number of verified combinations : ", len(list_with_verified_distances))
 result_setofThree = {}
 Anxiety_Avg_dict = {}
 counter = 0
-
+# list_with_verified_distances = [[25, 6, 114, 158]]
+# 25	64	114	158
 for _set_of_three in list_with_verified_distances:
 
     anxietyLevelFrequency = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -283,19 +219,10 @@ for _set_of_three in list_with_verified_distances:
     ending_SoC_list = []
     total_number_of_charges = 0
     discard_set = 0
-
-    # counter += 1
-    # print("count: ", counter)
-
-
-    # print("_set_of_three : ", _set_of_three)
-
-
     checkpointBased_Charging_Number_Count = []
 
     for i in range(number_of_charging_stations):
         checkpointBased_Charging_Number_Count.append(0)
-
 
     checkpointBased_strandedRiderCount = []
 
@@ -310,11 +237,8 @@ for _set_of_three in list_with_verified_distances:
 
         distance_travelled = 0
         counter += 1
-        # print("Initial soc counter : ", counter)
 
         for trip_number in total_number_of_trips:
-
-            # print("trip_number : ", trip_number)
 
             if(trip_number % 2 == 0):
 
@@ -330,7 +254,8 @@ for _set_of_three in list_with_verified_distances:
                         if (present_SoC > leastSoC_before_getting_stranded and present_SoC <= distance_where_charging_starts):
                             
                             for i in range(number_of_charging_stations):
-                                checkpointBased_Charging_Number_Count[i] += 1
+                                if (checkpointIndex == i):
+                                    checkpointBased_Charging_Number_Count[i] += 1
 
                             if (present_SoC > 45 and present_SoC <= 50):
                                 anxietyLevelFrequency[0] += 1
@@ -359,7 +284,7 @@ for _set_of_three in list_with_verified_distances:
                             elif (present_SoC > 5 and present_SoC <= 10):
                                 anxietyLevelFrequency[8] += 1
 
-                            present_SoC = 100
+                            present_SoC = full_charge_value
 
                         elif (present_SoC <= leastSoC_before_getting_stranded):                        
 
@@ -395,8 +320,8 @@ for _set_of_three in list_with_verified_distances:
                         if (present_SoC > leastSoC_before_getting_stranded and present_SoC <= 50):
 
                             for i in range(number_of_charging_stations):
-                                checkpointBased_Charging_Number_Count[i] += 1
-                                # print("checkpointBased_Charging_Number_Count : ", checkpointBased_Charging_Number_Count)
+                                if (checkpointIndex == i):
+                                    checkpointBased_Charging_Number_Count[i] += 1
 
                             if (present_SoC > 45 and present_SoC <= 50):
                                 anxietyLevelFrequency[0] += 1
@@ -425,14 +350,13 @@ for _set_of_three in list_with_verified_distances:
                             elif (present_SoC > 5 and present_SoC <= 10):
                                 anxietyLevelFrequency[8] += 1
 
-                            present_SoC = 100
+                            present_SoC = full_charge_value
 
                         elif (present_SoC <= leastSoC_before_getting_stranded):                        
 
                             total_strandedRiderCount += 1
 
                             for i in range(number_of_charging_stations):
-
                                 if (checkpointIndex == i):
                                     checkpointBased_strandedRiderCount[i] += 1
 
@@ -443,11 +367,9 @@ for _set_of_three in list_with_verified_distances:
                 
                 ending_SoC_list.append(present_SoC)
 
-            # avg_Station_Occupancy_number[i] = sum(checkpointBased_Charging_Number_Count[i])
 
         if (discard_set == 1):
             break
-
 
     for i in range(number_of_charging_stations):
         total_number_of_charges = total_number_of_charges + checkpointBased_Charging_Number_Count[i]
@@ -455,17 +377,11 @@ for _set_of_three in list_with_verified_distances:
     for i in range(number_of_charging_stations):
         if (checkpointBased_Charging_Number_Count[i] == 0):
             discarded_list_count += 1
-            # print("Stations with 0 Charging : ", _set_of_three)
-            # for i in range(number_of_c
-            # harging_stations):
-                # print("checkpointBased_Charging_Number_Count ", checkpointBased_Charging_Number_Count[i])
-
-    if (total_strandedRiderCount == 0 and discarded_list_count == 0):
+           
+    # if (total_strandedRiderCount == 0 and discarded_list_count == 0):
+    if (discarded_list_count == 0):
 
         averageEndingSoC = sum(ending_SoC_list) / len(ending_SoC_list)
-        # result_setofThree.update({
-        #     tuple(_set_of_three) : total_strandedRiderCount
-        # })
 
         i = 1
         summ = 0
@@ -478,11 +394,9 @@ for _set_of_three in list_with_verified_distances:
                 tuple(_set_of_three) : [(summ / total_number_of_charges), averageEndingSoC]
             })
 
-# print(filtered_list)
-# print(type(filtered_list))
-# print("List after filtration : ", (Anxiety_Avg_dict))
 print("List before filtration : ", len(list_with_verified_distances))
 print("List after filtration : ", len(Anxiety_Avg_dict))
+# print("List after filtration : ", (Anxiety_Avg_dict))
 print("Discarded count : ", discarded_number_of_sets)
 
 
@@ -491,14 +405,9 @@ print("Discarded count : ", discarded_number_of_sets)
 # # TOP 10 SETS OF THREE WITH LEAST AVERAGE ANXIETY LEVELS
 
 # # -------------------------------------------------------------------------------------
+print("anxietyLevelFrequency ", anxietyLevelFrequency)
 
-# print("stranded count that should be zero : ", total_strandedRiderCount)
 data = Anxiety_Avg_dict
-
-
-print("least_number_of_charging_stations : ", least_number_of_charging_stations)
-print("Most_number_of_charging_stations : ", most_number_of_charging_stations)
-print("counter_exception :", counter_exception)
 
 anxLevelList = []
 sortedDict = {}
@@ -507,7 +416,7 @@ minKey = 0
 for i in range(10):
     minAnxTemp = 200
     for key, val in data.items():
-        print(key,val)
+        # print(key,val)
         if val[0] < minAnxTemp:
             minAnxTemp = val[0]
             minKey = key
@@ -521,26 +430,40 @@ print("Sorted Top 10: ")
 print(sortedDict)
 
 
-# import csv  
 
-# header = ['name', 'area', 'country_code2', 'country_code3']
-# data = ['Afghanistan', 652090, 'AF', 'AFG']
-# fieldnames = ['name', 'area', 'country_code2', 'country_code3']
+overall_data = []
 
-# with open('data_test.csv', 'w', encoding='UTF8') as f:
-#     # writer = csv.writer(f)
+for value1, value2 in sortedDict.items():
 
-#     # # write the header
-#     # writer.writerow(sortedDict)
+    current_temp_list = []
 
-#     # # write the data
-#     # writer.writerow(sortedDict)
+    for i in range(len(value1)):
+        print(value1[i])
+        current_temp_list.append(value1[i])
+    
+    current_temp_list.append(value2[0])
+    current_temp_list.append(value2[1])
+
+    overall_data.append(current_temp_list)
+
+print(overall_data)
 
 
-# # csv header
+# open the file in the write mode
+f = open('ChargingStation_csv/soc100_200_4CS.csv', 'w')
 
-#     writer = csv.DictWriter(f, fieldnames=fieldnames)
-#     writer.writeheader()
-#     writer.writerows(sortedDict)
+# create the csv writer
+writer = csv.writer(f)
+
+# write a row to the csv file
+writer.writerows(overall_data)
+
+# close the file
+f.close()
+
+print("\n")    
+
+print(overall_data)
+
 
 
