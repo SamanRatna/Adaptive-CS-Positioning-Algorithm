@@ -17,10 +17,10 @@ import csv
 
 # Constant parameters
 num_of_bikes = 100                      # Total number of Bikes
-total_distance_in_one_trip = 200        # distance in kms
+total_distance_in_one_trip = 185        # distance in kms
 SoC_logging_distance = 1                # distance in kms
 full_charge_value = 100
-number_of_charging_stations = 4
+number_of_charging_stations = 3
 distance_where_charging_starts = 50
 
 x_axis_distance_in_a_trip = []
@@ -167,6 +167,7 @@ list_with_verified_distances = []
 counter_exception = 0
 
 for every_combination in all_possible_combinations:
+    print(every_combination)
     count += 1
 
     last_checkpoint = 0
