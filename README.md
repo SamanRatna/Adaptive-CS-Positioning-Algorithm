@@ -32,4 +32,5 @@ This Project implements an awesome Algorithm that helps EV Charger Suppliers to 
 
 - Select a route through a map
 - Set all the input parameters for the route
-- Run and Enjoy!
+- Run ChargingStation.py first to get first set of Outputs (Charging Station Locations, Range Anxiety and SoC at the END)
+- Then, Run standard_deviation.py to validate the results from the prior.
