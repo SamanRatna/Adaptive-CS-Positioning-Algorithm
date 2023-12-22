@@ -20,7 +20,7 @@ num_of_bikes = 100                      # Total number of Bikes
 total_distance_in_one_trip = 185        # distance in kms
 SoC_logging_distance = 1                # distance in kms
 full_charge_value = 100
-number_of_charging_stations = 3
+number_of_charging_stations = 4
 distance_where_charging_starts = 50
 
 x_axis_distance_in_a_trip = []
@@ -108,7 +108,7 @@ for initial_SoC in initial_values:
 
                     # Bike SoC decreases with increase in travel displacement by 1km
                     present_SoC -= 1
-
+ 
                 # Increase distance travelled by 1km
                 distance_travelled += 1
 
@@ -153,11 +153,11 @@ print("Points of Recharge")
 print(Distance_x_axis)
 print("Total number of Points of Recharge : ", len(Distance_x_axis))
 
-# # -------------------------------------------------------------------------------------
+# # # -------------------------------------------------------------------------------------
 
-# # GENERIC LOGIC
+# # # GENERIC LOGIC
 
-# # -------------------------------------------------------------------------------------
+# # # -------------------------------------------------------------------------------------
 least_number_of_charging_stations = math.floor(total_distance_in_one_trip/80)
 most_number_of_charging_stations = math.ceil(total_distance_in_one_trip/25)
 
@@ -167,7 +167,7 @@ list_with_verified_distances = []
 counter_exception = 0
 
 for every_combination in all_possible_combinations:
-    print(every_combination)
+    # print(every_combination)
     count += 1
 
     last_checkpoint = 0
@@ -200,13 +200,17 @@ for every_combination in all_possible_combinations:
     if (validity_counter == number_of_charging_stations + 1):
         list_with_verified_distances.append(every_combination)
 
+# print("VERIFIED LIST")
+# print(list_with_verified_distances)
 
+print("NUMBER OF TOTAL COMBINATIONS : ", count)
+print("NUMBER OF VERIFIED DISTANCES : ", len(list_with_verified_distances))
 
-# -------------------------------------------------------------------------------------
+# # -------------------------------------------------------------------------------------
 
-# FILTER OUT STRANDED RIDERS FROM THE VERIFIED SET
+# # FILTER OUT STRANDED RIDERS FROM THE VERIFIED SET
 
-# -------------------------------------------------------------------------------------
+# # -------------------------------------------------------------------------------------
 
 result_setofThree = {}
 Anxiety_Avg_dict = {}
@@ -215,6 +219,7 @@ counter = 0
 # 25	64	114	158
 for _set_of_three in list_with_verified_distances:
 
+    discarded_list_count = 0
     anxietyLevelFrequency = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     total_strandedRiderCount = 0
     ending_SoC_list = []
@@ -396,17 +401,16 @@ for _set_of_three in list_with_verified_distances:
             })
 
 print("List before filtration : ", len(list_with_verified_distances))
-print("List after filtration : ", len(Anxiety_Avg_dict))
+print("List after filtration  : ", len(Anxiety_Avg_dict))
 # print("List after filtration : ", (Anxiety_Avg_dict))
-print("Discarded count : ", discarded_number_of_sets)
 
 
-# # -------------------------------------------------------------------------------------
+# # # -------------------------------------------------------------------------------------
 
-# # TOP 10 SETS OF THREE WITH LEAST AVERAGE ANXIETY LEVELS
+# # # TOP 10 SETS OF THREE WITH LEAST AVERAGE ANXIETY LEVELS
 
-# # -------------------------------------------------------------------------------------
-print("anxietyLevelFrequency ", anxietyLevelFrequency)
+# # # -------------------------------------------------------------------------------------
+print("AnxietyLevelFrequency ", anxietyLevelFrequency)
 
 data = Anxiety_Avg_dict
 
@@ -451,7 +455,7 @@ print(overall_data)
 
 
 # open the file in the write mode
-f = open('ChargingStation_csv/soc100_200_4CS.csv', 'w')
+f = open('ChargingStation_csv/test_output.csv', 'w')
 
 # create the csv writer
 writer = csv.writer(f)
