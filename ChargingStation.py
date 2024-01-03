@@ -6,64 +6,11 @@ from Calculations import *
 # -------------------------------------------------------------------------------------
 result = Calculate_Points_Of_Recharge()
 
-Distance_x_axis = list(result.keys())
-
-# print("\n")
-# print("Points of Recharge")
-# print(Distance_x_axis)
-# print("TOTAL POINTS OF RECHARGE     : ", len(Distance_x_axis))
-
 # -------------------------------------------------------------------------------------
 # GENERIC LOGIC TO FILTER STATIONS TO LOCATE BETWEEN 50 - 100
 # -------------------------------------------------------------------------------------
-least_number_of_charging_stations = math.floor(total_distance_in_one_trip/80)
-most_number_of_charging_stations = math.ceil(total_distance_in_one_trip/25)
+Generate_Verified_Combinations(50, 100)
 
-all_possible_combinations = itertools.combinations(Distance_x_axis, number_of_charging_stations)
-list_with_verified_distances = []
-counter_exception = 0
-combination_count = 0
-
-for every_combination in all_possible_combinations:
-
-    combination_count += 1
-    last_checkpoint = 0
-    validity_counter = 0
-
-    for station_position in range(number_of_charging_stations+1):
-
-        if (station_position == number_of_charging_stations):
-
-            # When accounting for distance between last charging station and total distance in a trip
-            if ((total_distance_in_one_trip - every_combination[station_position - 1] >= 50) and (total_distance_in_one_trip - every_combination[station_position - 1] <= 100)):
-
-                validity_counter += 1
-                last_checkpoint = total_distance_in_one_trip
-            
-            else:
-                last_checkpoint = 0
-                break
-            
-        elif ((every_combination[station_position] - last_checkpoint >= 50) and (every_combination[station_position] - last_checkpoint <= 100)):
-
-            validity_counter += 1
-            last_checkpoint = every_combination[station_position]
-        
-        else:
-            last_checkpoint = 0
-            counter_exception += 1
-            break
-
-    if (validity_counter == number_of_charging_stations + 1):
-        list_with_verified_distances.append(every_combination)
-
-print("-------------------------------------------------------------------")
-print("VERIFIED COMBINATIONS OF SETS OF STATION LOCATIONS")
-print(list_with_verified_distances)
-print("-------------------------------------------------------------------")
-
-print("NUMBER OF TOTAL COMBINATIONS : ", combination_count)
-print("NUMBER OF VERIFIED DISTANCES : ", len(list_with_verified_distances))
 
 # -------------------------------------------------------------------------------------
 # FILTER OUT STRANDED RIDERS FROM THE VERIFIED SET
@@ -136,14 +83,24 @@ for i in range(len(topography_dataset) - 1):
 
             # Vehicle charged to 100%
             print("-------------------------")
-            print(f"Recharged Here at distance {total_distance_travelled} with SoC {present_SoC}!!")
+            print(f"<< Recharged at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
             print("-------------------------")
+
+            # Calculate Anxiety Level
+            Calculate_Anxiety_Level(present_SoC)
+
             present_SoC = 100
+            charge_count += 1
+
         
         elif (present_SoC <= stranded_threshold_SoC):
 
             # User is stranded here
             stranded_rider_count += 1
+            print("-------------------------")
+            print(f"<< User stranded at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
+            print("-------------------------")
+            break
 
         if ((SoC_degradation_factor == downhill_degradation_factor) and (present_SoC >= 100)):
             present_SoC = 100
@@ -153,16 +110,27 @@ for i in range(len(topography_dataset) - 1):
         distance_travelled_in_each_section += 1
         total_distance_travelled += 1
 
-        print("---------------")
-        print("AT SOC                   : ", present_SoC)
-        print("TOTAL DISTANCE           : ", total_distance_travelled)
-        print("DISTANCE IN THE SECTION  : ", distance_travelled_in_each_section)
+        # print("---------------")
+        # print("AT SOC                   : ", present_SoC)
+        # print("TOTAL DISTANCE           : ", total_distance_travelled)
+        # print("DISTANCE IN THE SECTION  : ", distance_travelled_in_each_section)
         
     # present_SoC at every end of the section
     print("Ending SoC at the end of the section : ", present_SoC)
 
 # ending_SoC at the end of one way trip
 print("Final ending SoC at the end of the whole trip : ", present_SoC)
+
+print("Anxiety levels in a list : ", anxietyLevelFrequency)
+
+i = 1
+summ = 0
+for _value in anxietyLevelFrequency:
+    summ = summ + _value*i
+    i += 1
+
+average_anxiety_level = summ / charge_count
+print("Average Anxiety Level    : ", average_anxiety_level)
 
 
 
