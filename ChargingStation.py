@@ -6,6 +6,7 @@ from Calculations import *
 # -------------------------------------------------------------------------------------
 result = Calculate_Points_Of_Recharge()
 
+
 # -------------------------------------------------------------------------------------
 # GENERIC LOGIC TO FILTER STATIONS TO LOCATE BETWEEN 50 - 100
 # -------------------------------------------------------------------------------------
@@ -34,94 +35,114 @@ print("*******************************************************************")
 # Simulation Constants
 # -----------------------------------
 if (simulation_status == 1):
-    initial_SoC = 60
-    station = [8, 97]
+    # initial_SoC = 60
+    station = [5, 107]
 # -----------------------------------
 # # for every pair of Charging Station
 # for station in list_with_verified_distances:
 
-#     # for every random SoC
-#     for initial_SoC in initial_values[0]:
+print(initial_values)
 
-present_SoC = initial_SoC
-total_distance_travelled = 0
+# for every random SoC
+for initial_SoC in initial_values[0]:
 
-# for every section of the topography
-for i in range(len(topography_dataset) - 1):
+    print("*****************")
+    print("INITIAL SOC : ", initial_SoC)
+    present_SoC = initial_SoC
+    total_distance_travelled = 0
+    stranded_rider_breakout_flag = 0
 
-    distance_travelled_in_each_section = 0
 
-    print("-------------------------------------------------------------------")
-    print("Section's Starting Point(km) and Elevation(m)   : ", topography_dataset[i][0], topography_dataset[i][1])
-    print("Section's Ending Point(km) and Elevation(m)     : ", topography_dataset[i+1][0], topography_dataset[i+1][1])
-    print("-------------------------------------------------------------------")
+    # for every section of the topography
+    for i in range(len(topography_dataset) - 1):
 
-    # Identify if elevation profile is uphill or downhill
-    if (topography_dataset[i][1] < topography_dataset[i+1][1]):
-        section_elevation_profile = UPHILL
-        SoC_degradation_factor = uphill_degradation_factor
+        distance_travelled_in_each_section = 0
 
-    elif (topography_dataset[i][1] > topography_dataset[i+1][1]):
-        section_elevation_profile = DOWNHILL
-        SoC_degradation_factor = downhill_degradation_factor
+        # print("-------------------------------------------------------------------")
+        # print("Section's Starting Point(km) and Elevation(m)   : ", topography_dataset[i][0], topography_dataset[i][1])
+        # print("Section's Ending Point(km) and Elevation(m)     : ", topography_dataset[i+1][0], topography_dataset[i+1][1])
+        # print("-------------------------------------------------------------------")
 
-    elif (topography_dataset[i][1] == topography_dataset[i+1][1]):
-        section_elevation_profile = PLAIN
-        SoC_degradation_factor = plain_terrain_degradation_factor
+        # Identify if elevation profile is uphill or downhill
+        if (topography_dataset[i][1] < topography_dataset[i+1][1]):
+            section_elevation_profile = UPHILL
+            SoC_degradation_factor = uphill_degradation_factor
 
-    # Distance of the route section
-    section_distance = topography_dataset[i+1][0] - topography_dataset[i][0]
-    print("Section_distance             : ", section_distance)
-    print("Elevation difference         : ", topography_dataset[i+1][1] - topography_dataset[i][1])
-    print("SoC_degradation_factor       : ", SoC_degradation_factor, "UPHILL" if(SoC_degradation_factor == uphill_degradation_factor) else "DOWNHILL" if(SoC_degradation_factor == downhill_degradation_factor) else "PLAIN")
-    print("-------------------------------------------------------------------")
+        elif (topography_dataset[i][1] > topography_dataset[i+1][1]):
+            section_elevation_profile = DOWNHILL
+            SoC_degradation_factor = downhill_degradation_factor
 
-    # When the rider hasn't reached the section_destination
-    while (distance_travelled_in_each_section < section_distance):
+        elif (topography_dataset[i][1] == topography_dataset[i+1][1]):
+            section_elevation_profile = PLAIN
+            SoC_degradation_factor = plain_terrain_degradation_factor
 
-        if ((total_distance_travelled in station) and (present_SoC <= threshold_SoC_where_charging_starts)):
+        # Distance of the route section
+        section_distance = topography_dataset[i+1][0] - topography_dataset[i][0]
+        # print("Section_distance             : ", section_distance)
+        # print("Elevation difference         : ", topography_dataset[i+1][1] - topography_dataset[i][1])
+        # print("SoC_degradation_factor       : ", SoC_degradation_factor, "UPHILL" if(SoC_degradation_factor == uphill_degradation_factor) else "DOWNHILL" if(SoC_degradation_factor == downhill_degradation_factor) else "PLAIN")
+        # print("-------------------------------------------------------------------")
 
-            # Vehicle charged to 100%
-            print("-------------------------")
-            print(f"<< Recharged at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
-            print("-------------------------")
+        # When the rider hasn't reached the section_destination
+        while (distance_travelled_in_each_section < section_distance):
 
-            # Calculate Anxiety Level
-            Calculate_Anxiety_Level(present_SoC)
+            if ((total_distance_travelled in station) and (present_SoC <= threshold_SoC_where_charging_starts) and (present_SoC >= stranded_threshold_SoC)):
 
-            present_SoC = 100
-            charge_count += 1
+                # Vehicle charged to 100%
+                print("-------------------------")
+                print(f"<< Recharged at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
+                print("-------------------------")
 
-        
-        elif (present_SoC <= stranded_threshold_SoC):
+                # Calculate Anxiety Level
+                Calculate_Anxiety_Level(present_SoC)
 
-            # User is stranded here
-            stranded_rider_count += 1
-            print("-------------------------")
-            print(f"<< User stranded at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
-            print("-------------------------")
-            break
+                present_SoC = 100
+                charge_count += 1
 
-        if ((SoC_degradation_factor == downhill_degradation_factor) and (present_SoC >= 100)):
-            present_SoC = 100
-        else:
+            
+            elif (present_SoC < stranded_threshold_SoC):
+
+                # User is stranded here
+                stranded_rider_count += 1
+                print("-------------------------")
+                print(f"<< User stranded at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
+                print("-------------------------")
+
+                stranded_rider_breakout_flag = 1
+                break
+
+            else:
+                unhandled_cases += 1
+
+            # if ((SoC_degradation_factor == downhill_degradation_factor) and (present_SoC >= 100)):
+            #     present_SoC = 100
+            #     print("ERROR STATE")
+            # else:
+            print("yo")
             present_SoC += SoC_degradation_factor
 
-        distance_travelled_in_each_section += 1
-        total_distance_travelled += 1
+            distance_travelled_in_each_section += 1
+            total_distance_travelled += 1
 
-        # print("---------------")
-        # print("AT SOC                   : ", present_SoC)
-        # print("TOTAL DISTANCE           : ", total_distance_travelled)
-        # print("DISTANCE IN THE SECTION  : ", distance_travelled_in_each_section)
-        
-    # present_SoC at every end of the section
-    print("Ending SoC at the end of the section : ", present_SoC)
+            # print("---------------")
+            # print("AT SOC                   : ", present_SoC)
+            # print("TOTAL DISTANCE           : ", total_distance_travelled)
+            # print("DISTANCE IN THE SECTION  : ", distance_travelled_in_each_section)
+        if (stranded_rider_breakout_flag):
+            print("yoyo")
+            break
+            
+        # present_SoC at every end of the section
+        # print("Ending SoC at the end of the section : ", present_SoC)
+    print("yoyoyo")
 
-# ending_SoC at the end of one way trip
-print("Final ending SoC at the end of the whole trip : ", present_SoC)
-
-print("Anxiety levels in a list : ", anxietyLevelFrequency)
+    # ending_SoC at the end of one way trip
+    print("Final ending SoC at the end of the whole trip : ", present_SoC)
+    print("Anxiety levels in a list : ", anxietyLevelFrequency)
+    print("CHARGE COUNT             : ", charge_count)
+    print("STRANDED RIDER COUNT     : ", stranded_rider_count)
+    print("*****************")
+    print("\n")
 
 i = 1
 summ = 0
@@ -129,8 +150,17 @@ for _value in anxietyLevelFrequency:
     summ = summ + _value*i
     i += 1
 
-average_anxiety_level = summ / charge_count
-print("Average Anxiety Level    : ", average_anxiety_level)
+
+if (charge_count != 0):
+    average_anxiety_level = summ / charge_count
+    print("CHARGE COUNT             : ", charge_count)
+    print("STRANDED RIDER COUNT     : ", stranded_rider_count)
+    print("UNHANDLED CASES          : ", unhandled_cases)
+    print("TOTAL CASES              : ", charge_count + stranded_rider_count + unhandled_cases)
+    print("Average Anxiety Level    : ", average_anxiety_level)
+
+else:
+    print("Average Anxiety Level    : USER STRANDED")
 
 
 

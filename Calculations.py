@@ -13,12 +13,12 @@ def Calculate_Points_Of_Recharge():
     df = pd.read_excel(r'data_collection2.xlsx')
     # initial_values = []
 
-    # Initialize an empty nested list
-    initial_values = [[] for _ in range(len(topography_dataset_distance))]
 
     print("Data Column Used             : ", dataColumn)
-    for count in range(len(df[dataColumn])):
+    for count in range(len(df[dataColumn]) - 50):
         initial_values[0].append(df[dataColumn][count])
+    
+    print(initial_values[0])
 
     # # Output Variable define
     points_of_recharge = []
@@ -169,6 +169,6 @@ def Calculate_Anxiety_Level(present_SoC):
     elif (present_SoC > 10 and present_SoC <= 15):
         anxietyLevelFrequency[7] += 1
 
-    elif (present_SoC > 5 and present_SoC <= 10):
+    elif (present_SoC >= 5 and present_SoC <= 10):
         anxietyLevelFrequency[8] += 1
 
