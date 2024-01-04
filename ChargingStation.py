@@ -36,7 +36,7 @@ print("*******************************************************************")
 # -----------------------------------
 if (simulation_status == 1):
     # initial_SoC = 60
-    station = [5, 107]
+    station = [20, 101]
 # -----------------------------------
 # # for every pair of Charging Station
 # for station in list_with_verified_distances:
@@ -98,15 +98,14 @@ for initial_SoC in initial_values[0]:
 
                 present_SoC = 100
                 charge_count += 1
-
             
             elif (present_SoC < stranded_threshold_SoC):
 
                 # User is stranded here
                 stranded_rider_count += 1
-                print("-------------------------")
-                print(f"<< User stranded at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
-                print("-------------------------")
+                # print("-------------------------")
+                # print(f"<< User stranded at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
+                # print("-------------------------")
 
                 stranded_rider_breakout_flag = 1
                 break
@@ -114,11 +113,6 @@ for initial_SoC in initial_values[0]:
             else:
                 unhandled_cases += 1
 
-            # if ((SoC_degradation_factor == downhill_degradation_factor) and (present_SoC >= 100)):
-            #     present_SoC = 100
-            #     print("ERROR STATE")
-            # else:
-            print("yo")
             present_SoC += SoC_degradation_factor
 
             distance_travelled_in_each_section += 1
@@ -129,14 +123,15 @@ for initial_SoC in initial_values[0]:
             # print("TOTAL DISTANCE           : ", total_distance_travelled)
             # print("DISTANCE IN THE SECTION  : ", distance_travelled_in_each_section)
         if (stranded_rider_breakout_flag):
-            print("yoyo")
             break
             
         # present_SoC at every end of the section
         # print("Ending SoC at the end of the section : ", present_SoC)
-    print("yoyoyo")
 
     # ending_SoC at the end of one way trip
+    if (stranded_rider_breakout_flag == 0):
+        ending_soc_cumulation += present_SoC
+
     print("Final ending SoC at the end of the whole trip : ", present_SoC)
     print("Anxiety levels in a list : ", anxietyLevelFrequency)
     print("CHARGE COUNT             : ", charge_count)
@@ -147,20 +142,24 @@ for initial_SoC in initial_values[0]:
 i = 1
 summ = 0
 for _value in anxietyLevelFrequency:
-    summ = summ + _value*i
+    summ = summ + _value * i
     i += 1
 
 
 if (charge_count != 0):
+
     average_anxiety_level = summ / charge_count
+    average_ending_soc = ending_soc_cumulation / charge_count
+
     print("CHARGE COUNT             : ", charge_count)
     print("STRANDED RIDER COUNT     : ", stranded_rider_count)
     print("UNHANDLED CASES          : ", unhandled_cases)
     print("TOTAL CASES              : ", charge_count + stranded_rider_count + unhandled_cases)
     print("Average Anxiety Level    : ", average_anxiety_level)
+    print("Average Ending SoC       : ", average_ending_soc)
 
 else:
-    print("Average Anxiety Level    : USER STRANDED")
+    print("Average Anxiety Level    : ALL USERS STRANDED")
 
 
 

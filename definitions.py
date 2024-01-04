@@ -67,3 +67,5 @@ charge_count                            = 0
 initial_values                          = [[] for _ in range(len(topography_dataset_distance))]
 unhandled_cases                         = 0
 stranded_rider_breakout_flag            = 0
+ending_soc_cumulation                   = 0
+average_ending_soc                      = 0

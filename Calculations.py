@@ -15,7 +15,7 @@ def Calculate_Points_Of_Recharge():
 
 
     print("Data Column Used             : ", dataColumn)
-    for count in range(len(df[dataColumn]) - 50):
+    for count in range(len(df[dataColumn])):
         initial_values[0].append(df[dataColumn][count])
     
     print(initial_values[0])
