@@ -11,8 +11,6 @@ result = Calculate_Points_Of_Recharge()
 # GENERIC LOGIC TO FILTER STATIONS TO LOCATE BETWEEN 50 - 100
 # -------------------------------------------------------------------------------------
 list_with_verified_distances = Generate_Verified_Combinations(50, 100)
-print(list_with_verified_distances)
-
 
 # -------------------------------------------------------------------------------------
 # FILTER OUT STRANDED RIDERS FROM THE VERIFIED SET
@@ -38,15 +36,18 @@ print("*******************************************************************")
 if (simulation_status == 1):
     # initial_SoC = 60
     # station = [20, 101]
-    station_list = [[20, 101], [21, 101]]
+    station_list = [50, 101], [54, 110]
+    # list_with_verified_distances = list_with_verified_distances[0:50]
+
+print(initial_values)
 # -----------------------------------
 # # for every pair of Charging Station
-# for station in list_with_verified_distances:
-for station in station_list:
+for station in list_with_verified_distances:
+# for station in station_list:
 
     print("\n")
     print("----------------------------------------------------------------------------------------------------------------------")
-    print(initial_values)
+    print("STATION      : ", station)
 
     ending_soc_cumulation   = 0
     anxietyLevelFrequency   = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -107,7 +108,36 @@ for station in station_list:
 
                     # Calculate Anxiety Level
                     print(present_SoC)
-                    anxietyLevelFrequency = Calculate_Anxiety_Level(present_SoC)
+                    # anxietyLevelFrequency = Calculate_Anxiety_Level(present_SoC)
+
+                    if (present_SoC > 45 and present_SoC <= 50):
+                        anxietyLevelFrequency[0] += 1
+
+                    elif (present_SoC > 40 and present_SoC <= 45):
+                        anxietyLevelFrequency[1] += 1
+
+                    elif (present_SoC > 35 and present_SoC <= 40):
+                        anxietyLevelFrequency[2] += 1
+
+                    elif (present_SoC > 30 and present_SoC <= 35):
+                        anxietyLevelFrequency[3] += 1
+
+                    elif (present_SoC > 25 and present_SoC <= 30):
+                        anxietyLevelFrequency[4] += 1
+
+                    elif (present_SoC > 20 and present_SoC <= 25):
+                        anxietyLevelFrequency[5] += 1
+
+                    elif (present_SoC > 15 and present_SoC <= 20):
+                        anxietyLevelFrequency[6] += 1
+
+                    elif (present_SoC > 10 and present_SoC <= 15):
+                        anxietyLevelFrequency[7] += 1
+
+                    elif (present_SoC >= 5 and present_SoC <= 10):
+                        anxietyLevelFrequency[8] += 1
+
+                    print(anxietyLevelFrequency)
                     
                     present_SoC = 100
                     charge_count += 1
@@ -116,11 +146,13 @@ for station in station_list:
 
                     # User is stranded here
                     stranded_rider_count += 1
-                    # print("-------------------------")
-                    # print(f"<< User stranded at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
-                    # print("-------------------------")
+                    print("-------------------------")
+                    print(f"<< User stranded at distance {total_distance_travelled} km with SoC {present_SoC}!! >>")
+                    print("-------------------------")
 
                     stranded_rider_breakout_flag = 1
+                    overall_stranded_rider += 1
+
                     break
 
                 else:
@@ -179,13 +211,77 @@ for station in station_list:
     else:
         print("Average Anxiety Level    : ALL USERS STRANDED")
 
-    # anxietyLevelFrequency   = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 
 
+print(Anxiety_Avg_dict)
+
+# -------------------------------------------------------------------------------------
+# TOP 10 SETS OF THREE WITH LEAST AVERAGE ANXIETY LEVELS
+# -------------------------------------------------------------------------------------
+
+print("AnxietyLevelFrequency ", anxietyLevelFrequency)
+
+data = Anxiety_Avg_dict
+
+anxLevelList = []
+sortedDict = {}
+
+minKey = 0
+
+for i in range(10):
+    minAnxTemp = 200
+    for key, val in data.items():
+        # print(key,val)
+        if val[0] < minAnxTemp:
+            minAnxTemp = val[0]
+            minKey = key
+            minVal = val
+    del data[(minKey)]
+    minVal[0] = round(minVal[0], 2)
+    minVal[1] = round(minVal[1], 2)
+    sortedDict.update({minKey: minVal})
+
+print("Sorted Top 10: ")
+print(sortedDict)
+
+print("TOTAL STRANDED RIDERS : ", overall_stranded_rider)
 
 
-    print(Anxiety_Avg_dict)
+
+overall_data = []
+
+for value1, value2 in sortedDict.items():
+
+    current_temp_list = []
+
+    for i in range(len(value1)):
+        print(value1[i])
+        current_temp_list.append(value1[i])
+    
+    current_temp_list.append(value2[0])
+    current_temp_list.append(value2[1])
+
+    overall_data.append(current_temp_list)
+
+print(overall_data)
+
+
+# open the file in the write mode
+f = open('ChargingStation_csv/test__output.csv', 'w')
+
+# create the csv writer
+writer = csv.writer(f)
+
+# write a row to the csv file
+writer.writerows(overall_data)
+
+# close the file
+f.close()
+
+print("\n")    
+
+print(overall_data)
 
 
 
