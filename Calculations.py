@@ -15,7 +15,7 @@ def Calculate_Points_Of_Recharge():
 
 
     print("Data Column Used             : ", dataColumn)
-    for count in range(len(df[dataColumn])):
+    for count in range(len(df[dataColumn]) - 95):
         initial_values[0].append(df[dataColumn][count])
     
     print(initial_values[0])
@@ -136,9 +136,9 @@ def Generate_Verified_Combinations(min_distance, max_distance):
 
     print("-------------------------------------------------------------------")
     print("VERIFIED COMBINATIONS OF SETS OF STATION LOCATIONS")
-    print(list_with_verified_distances)
+    # print(list_with_verified_distances)
+    return (list_with_verified_distances)
     print("-------------------------------------------------------------------")
-
     print("NUMBER OF TOTAL COMBINATIONS : ", combination_count)
     print("NUMBER OF VERIFIED DISTANCES : ", len(list_with_verified_distances))
 
@@ -172,3 +172,4 @@ def Calculate_Anxiety_Level(present_SoC):
     elif (present_SoC >= 5 and present_SoC <= 10):
         anxietyLevelFrequency[8] += 1
 
+    return(anxietyLevelFrequency)
